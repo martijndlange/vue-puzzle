@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rectangular-puzzle alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+<metadata>
+<title></title>
+<creator>T&amp;O PPS - T&amp;O Software, Groningen, The Netherlands</creator>
+<copyright>(c)2019 T&amp;O Software, Groningen, The Netherlands</copyright>
+<description></description>
+</metadata>
+<crossword>
+<grid width="15" height="10">
+<grid-look numbering-scheme="none" clue-square-divider-width="0.7"></grid-look>
+<cell x="1" y="1" type="clue"><clue word="24">dronkaard</clue></cell>
+<cell x="1" y="2" solution="R"><arrow from="top" to="right"></arrow></cell>
+<cell x="1" y="3" type="clue"><clue word="4">vervoer-\nmiddel</clue></cell>
+<cell x="1" y="4" solution="P"><arrow from="bottom" to="right"></arrow></cell>
+<cell x="1" y="5" type="clue"><clue word="7">medaille</clue></cell>
+<cell x="1" y="6" type="clue"><clue word="12">land in\nZuid-\nAmerika</clue></cell>
+<cell x="1" y="7" type="clue"><clue word="16">steen-\nsoort</clue></cell>
+<cell x="1" y="8" solution="L"><arrow from="top" to="right"></arrow></cell>
+<cell x="1" y="9" type="clue"><clue word="19">graan-\ngewas</clue></cell>
+<cell x="1" y="10" solution="T"><arrow from="top" to="right"></arrow></cell>
+<cell x="2" y="1" solution="Z"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="2" y="2" solution="A"></cell>
+<cell x="2" y="3" solution="T"><arrow from="left" to="right"></arrow></cell>
+<cell x="2" y="4" solution="L"></cell>
+<cell x="2" y="5" solution="A"></cell>
+<cell x="2" y="6" solution="P"><arrow from="left" to="right"></arrow></cell>
+<cell x="2" y="7" type="clue"><clue word="14">kaper</clue></cell>
+<cell x="2" y="8" solution="E"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="2" y="9" solution="G"></cell>
+<cell x="2" y="10" solution="O"></cell>
+<cell x="3" y="1" type="clue"><clue word="29">papegaai</clue></cell>
+<cell x="3" y="2" solution="A"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="3" y="3" solution="R"></cell>
+<cell x="3" y="4" solution="A"></cell>
+<cell x="3" y="5" type="clue"><clue word="10">sierplant</clue></cell>
+<cell x="3" y="6" solution="E"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="3" y="7" solution="P"></cell>
+<cell x="3" y="8" solution="I"></cell>
+<cell x="3" y="9" solution="E"></cell>
+<cell x="3" y="10" solution="K"></cell>
+<cell x="4" y="1" type="clue"><clue word="30">navelzwijn</clue></cell>
+<cell x="4" y="2" solution="P"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="4" y="3" solution="E"></cell>
+<cell x="4" y="4" solution="K"></cell>
+<cell x="4" y="5" solution="A"></cell>
+<cell x="4" y="6" solution="R"></cell>
+<cell x="4" y="7" solution="I"></cell>
+<cell x="4" y="8" type="clue"><clue word="17">kunst-\nvezelstof</clue></cell>
+<cell x="4" y="9" solution="R"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="4" y="10" solution="O"></cell>
+<cell x="5" y="1" type="clue"><clue word="25">land in\nAfrika</clue></cell>
+<cell x="5" y="2" type="clue"><clue word="2">honderd\njaar</clue></cell>
+<cell x="5" y="3" solution="I"></cell>
+<cell x="5" y="4" type="clue"><clue word="8">riv. in\nFrankrijk</clue></cell>
+<cell x="5" y="5" solution="K"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="5" y="6" solution="U"></cell>
+<cell x="5" y="7" solution="R"></cell>
+<cell x="5" y="8" solution="A"></cell>
+<cell x="5" y="9" solution="S"></cell>
+<cell x="5" y="10" type="clue"><clue word="22">gekheid</clue></cell>
+<cell x="6" y="1" solution="K"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="6" y="2" solution="E"><arrow from="left" to="right"></arrow></cell>
+<cell x="6" y="3" solution="N"></cell>
+<cell x="6" y="4" solution="I"></cell>
+<cell x="6" y="5" solution="A"></cell>
+<cell x="6" y="6" type="clue"><clue word="41">daden</clue></cell>
+<cell x="6" y="7" solution="A"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="6" y="8" solution="C"></cell>
+<cell x="6" y="9" solution="T"></cell>
+<cell x="6" y="10" solution="A"><arrow from="left" to="right"></arrow></cell>
+<cell x="7" y="1" type="clue"><clue word="26">doorstikte\ndeken</clue></cell>
+<cell x="7" y="2" solution="E"></cell>
+<cell x="7" y="3" type="clue"><clue word="5">vreemde\ntaal</clue></cell>
+<cell x="7" y="4" solution="S"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="7" y="5" solution="N"></cell>
+<cell x="7" y="6" solution="A"></cell>
+<cell x="7" y="7" solution="A"></cell>
+<cell x="7" y="8" solution="R"></cell>
+<cell x="7" y="9" type="clue"><clue word="20">tropische\nvogel</clue></cell>
+<cell x="7" y="10" solution="P"></cell>
+<cell x="8" y="1" solution="Q"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="8" y="2" solution="U"></cell>
+<cell x="8" y="3" solution="I"></cell>
+<cell x="8" y="4" solution="L"></cell>
+<cell x="8" y="5" solution="T"></cell>
+<cell x="8" y="6" type="clue"><clue word="13">Bijbelse\nberg</clue></cell>
+<cell x="8" y="7" solution="T"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="8" y="8" solution="Y"></cell>
+<cell x="8" y="9" solution="P"><arrow from="left" to="right"></arrow></cell>
+<cell x="8" y="10" solution="E"></cell>
+<cell x="9" y="1" type="clue"><clue word="31">uitroep\nvan smart</clue></cell>
+<cell x="9" y="2" solution="W"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="9" y="3" solution="E"></cell>
+<cell x="9" y="4" solution="E"></cell>
+<cell x="9" y="5" type="clue"><clue word="37">Sp. titel</clue></cell>
+<cell x="9" y="6" solution="H"></cell>
+<cell x="9" y="7" type="clue"><clue word="15">cactus-\nsoort</clue></cell>
+<cell x="9" y="8" solution="L"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="9" y="9" solution="A"></cell>
+<cell x="9" y="10" solution="R"></cell>
+<cell x="10" y="1" type="clue"><clue word="27">dorp\n(Maleis)</clue></cell>
+<cell x="10" y="2" type="clue"><clue word="3">uitheems\ndier</clue></cell>
+<cell x="10" y="3" solution="R"></cell>
+<cell x="10" y="4" type="clue"><clue word="9">herfst-\nbloem</clue></cell>
+<cell x="10" y="5" solution="D"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="10" y="6" solution="O"></cell>
+<cell x="10" y="7" solution="N"></cell>
+<cell x="10" y="8" type="clue"><clue word="48">monniks-\nkleed</clue></cell>
+<cell x="10" y="9" solution="P"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="10" y="10" solution="IJ"></cell>
+<cell x="11" y="1" solution="D"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="11" y="2" solution="E"><arrow from="left" to="right"></arrow></cell>
+<cell x="11" y="3" solution="S"></cell>
+<cell x="11" y="4" solution="A"><arrow from="left" to="right"></arrow></cell>
+<cell x="11" y="5" type="clue"><clue word="39">lichtrood</clue></cell>
+<cell x="11" y="6" solution="R"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="11" y="7" solution="O"></cell>
+<cell x="11" y="8" solution="Z"></cell>
+<cell x="11" y="9" solution="E"></cell>
+<cell x="11" y="10" type="clue"><clue word="23">pier</clue></cell>
+<cell x="12" y="1" type="clue"><clue word="28">schild-\nwacht</clue></cell>
+<cell x="12" y="2" solution="X"></cell>
+<cell x="12" y="3" type="clue"><clue word="6">bron-\nwater</clue></cell>
+<cell x="12" y="4" solution="S"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="12" y="5" solution="O"></cell>
+<cell x="12" y="6" solution="E"></cell>
+<cell x="12" y="7" solution="P"></cell>
+<cell x="12" y="8" type="clue"><clue word="18">kostuum</clue></cell>
+<cell x="12" y="9" solution="G"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="12" y="10" solution="W"><arrow from="left" to="right"></arrow></cell>
+<cell x="13" y="1" solution="P"><arrow from="left" to="bottom"></arrow></cell>
+<cell x="13" y="2" solution="O"></cell>
+<cell x="13" y="3" solution="S"></cell>
+<cell x="13" y="4" solution="T"></cell>
+<cell x="13" y="5" type="clue"><clue word="11">noordwest</clue></cell>
+<cell x="13" y="6" solution="B"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="13" y="7" solution="A"></cell>
+<cell x="13" y="8" solution="P"></cell>
+<cell x="13" y="9" solution="A"></cell>
+<cell x="13" y="10" solution="O"></cell>
+<cell x="14" y="1" type="clue"><clue word="32">niet\ngesloten</clue></cell>
+<cell x="14" y="2" solution="O"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="14" y="3" solution="P"></cell>
+<cell x="14" y="4" solution="E"></cell>
+<cell x="14" y="5" solution="N"></cell>
+<cell x="14" y="6" type="clue"><clue word="43">open plek\nin bos</clue></cell>
+<cell x="14" y="7" solution="L"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="14" y="8" solution="A"></cell>
+<cell x="14" y="9" solution="A"></cell>
+<cell x="14" y="10" solution="R"></cell>
+<cell x="15" y="1" type="clue"><clue word="33">graansoort</clue></cell>
+<cell x="15" y="2" solution="T"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="15" y="3" solution="A"></cell>
+<cell x="15" y="4" solution="R"></cell>
+<cell x="15" y="5" solution="W"></cell>
+<cell x="15" y="6" solution="E"></cell>
+<cell x="15" y="7" type="clue"><clue word="46">horizon</clue></cell>
+<cell x="15" y="8" solution="K"><arrow from="top" to="bottom"></arrow></cell>
+<cell x="15" y="9" solution="I"></cell>
+<cell x="15" y="10" solution="M"></cell>
+</grid>
+<word id="1" x="1-4" y="2"></word>
+<word id="2" x="6-9" y="2"></word>
+<word id="3" x="11-15" y="2"></word>
+<word id="4" x="2-6" y="3"></word>
+<word id="5" x="8-11" y="3"></word>
+<word id="6" x="13-15" y="3"></word>
+<word id="7" x="1-4" y="4"></word>
+<word id="8" x="6-9" y="4"></word>
+<word id="9" x="11-15" y="4"></word>
+<word id="10" x="4-8" y="5"></word>
+<word id="11" x="14-15" y="5"></word>
+<word id="12" x="2-5" y="6"></word>
+<word id="13" x="9-13" y="6"></word>
+<word id="14" x="3-8" y="7"></word>
+<word id="15" x="10-14" y="7"></word>
+<word id="16" x="1-3" y="8"></word>
+<word id="17" x="5-9" y="8"></word>
+<word id="18" x="13-15" y="8"></word>
+<word id="19" x="2-6" y="9"></word>
+<word id="20" x="8-15" y="9"></word>
+<word id="21" x="1-4" y="10"></word>
+<word id="22" x="6-10" y="10"></word>
+<word id="23" x="12-15" y="10"></word>
+<word id="24" x="2" y="1-6"></word>
+<word id="25" x="6" y="1-5"></word>
+<word id="26" x="8" y="1-5"></word>
+<word id="27" x="11" y="1-4"></word>
+<word id="28" x="13" y="1-4"></word>
+<word id="29" x="3" y="2-4"></word>
+<word id="30" x="4" y="2-7"></word>
+<word id="31" x="9" y="2-4"></word>
+<word id="32" x="14" y="2-5"></word>
+<word id="33" x="15" y="2-6"></word>
+<word id="34" x="7" y="4-8"></word>
+<word id="35" x="12" y="4-7"></word>
+<word id="36" x="5" y="5-9"></word>
+<word id="37" x="10" y="5-7"></word>
+<word id="38" x="3" y="6-10"></word>
+<word id="39" x="11" y="6-9"></word>
+<word id="40" x="13" y="6-10"></word>
+<word id="41" x="6" y="7-10"></word>
+<word id="42" x="8" y="7-10"></word>
+<word id="43" x="14" y="7-10"></word>
+<word id="44" x="2" y="8-10"></word>
+<word id="45" x="9" y="8-10"></word>
+<word id="46" x="15" y="8-10"></word>
+<word id="47" x="4" y="9-10"></word>
+<word id="48" x="10" y="9-10"></word>
+<word id="49" x="12" y="9-10"></word>
+<clues ordering="normal">
+<title><b>HORIZONTAAL</b></title>
+<clue word="1" format="4">knolgewas</clue>
+<clue word="2" format="4">honderd jaar</clue>
+<clue word="3" format="5">uitheems dier</clue>
+<clue word="4" format="5">vervoermiddel</clue>
+<clue word="5" format="4">vreemde taal</clue>
+<clue word="6" format="3">bronwater</clue>
+<clue word="7" format="4">medaille</clue>
+<clue word="8" format="4">riv. in Frankrijk</clue>
+<clue word="9" format="5">herfstbloem</clue>
+<clue word="10" format="5">sierplant</clue>
+<clue word="11" format="2">noordwest</clue>
+<clue word="12" format="4">land in ZuidAmerika</clue>
+<clue word="13" format="5">Bijbelse berg</clue>
+<clue word="14" format="6">kaper</clue>
+<clue word="15" format="5">cactussoort</clue>
+<clue word="16" format="3">steensoort</clue>
+<clue word="17" format="5">kunstvezelstof</clue>
+<clue word="18" format="3">kostuum</clue>
+<clue word="19" format="5">graangewas</clue>
+<clue word="20" format="8">tropische vogel</clue>
+<clue word="21" format="4">Indon. winkel</clue>
+<clue word="22" format="5">gekheid</clue>
+<clue word="23" format="4">pier</clue>
+</clues>
+<clues ordering="normal">
+<title><b>VERTIKAAL</b></title>
+<clue word="24" format="6">dronkaard</clue>
+<clue word="25" format="5">land in Afrika</clue>
+<clue word="26" format="5">doorstikte deken</clue>
+<clue word="27" format="4">dorp (Maleis)</clue>
+<clue word="28" format="4">schildwacht</clue>
+<clue word="29" format="3">papegaai</clue>
+<clue word="30" format="6">navelzwijn</clue>
+<clue word="31" format="3">uitroep van smart</clue>
+<clue word="32" format="4">niet gesloten</clue>
+<clue word="33" format="5">graansoort</clue>
+<clue word="34" format="5">deel v.e. piano</clue>
+<clue word="35" format="4">voorgerecht</clue>
+<clue word="36" format="5">harnas</clue>
+<clue word="37" format="3">Sp. titel</clue>
+<clue word="38" format="5">dichtkunst</clue>
+<clue word="39" format="4">lichtrood</clue>
+<clue word="40" format="5">warme snack</clue>
+<clue word="41" format="4">daden</clue>
+<clue word="42" format="4">model</clue>
+<clue word="43" format="4">open plek in bos</clue>
+<clue word="44" format="3">ik (Lat.)</clue>
+<clue word="45" format="3">gibbon</clue>
+<clue word="46" format="3">horizon</clue>
+<clue word="47" format="2">ruimtelijke ordening</clue>
+<clue word="48" format="2">monnikskleed</clue>
+<clue word="49" format="2">grondwet</clue>
+</clues>
+</crossword>
+</rectangular-puzzle>
