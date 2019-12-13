@@ -57,6 +57,17 @@ class PuzzleController extends Controller
             $cells[] = $c;
         }
 
+        shuffle($cells);
+
+        // todo hier woorden gebruiken en matchen met solutions in cells
+        $keyword = 'abcde';
+        $placed = 1;
+        for ($i = 0; $i < count($cells); $i++) {
+            if (empty($cells[$i]['clue']) && $placed <= strlen($keyword)) {
+                $cells[$i]['keyindex'] = $placed++;
+            }
+        }
+
         $cells = json_encode($cells);
         $words = json_encode($words);
         $clues = json_encode($clues);
@@ -66,7 +77,8 @@ class PuzzleController extends Controller
             'gridHeight',
             'cells',
             'clues',
-            'words'
+            'words',
+            'keyword'
         ));
     }
 }

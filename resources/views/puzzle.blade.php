@@ -21,6 +21,7 @@
                 :cells="{{ $cells }}"
                 :clues="{{ $clues }}"
                 :words="{{ $words }}"
+                keyword="{{ $keyword }}"
             />
         </div>
         <div class="column is-2">

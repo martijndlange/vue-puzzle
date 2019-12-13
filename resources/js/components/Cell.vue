@@ -29,6 +29,13 @@
     >
       {{ value }}
     </p>
+
+    <div
+      v-if="isKeyCell"
+      class="key"
+    >
+      {{ keyindex }}
+    </div>
   </div>
 </template>
 
@@ -44,6 +51,11 @@
         type: String,
         required: false,
         default: '',
+      },
+      keyindex: {
+        type: Number,
+        required: false,
+        default: 0,
       },
       clue: {
         type: String,
@@ -97,6 +109,9 @@
       },
       isClue: function() {
         return this.clue !== '';
+      },
+      isKeyCell: function() {
+        return this.keyindex !== 0;
       },
       hasArrow: function () {
         return (this.arrows.from);
@@ -192,6 +207,13 @@
     &.clue {
       background-color: #FFFEE6;
       cursor: default;
+    }
+
+    div.key {
+        position: absolute;
+        bottom: 0;
+        right: 2px;
+        text-align: right;
     }
 
     p.clue {

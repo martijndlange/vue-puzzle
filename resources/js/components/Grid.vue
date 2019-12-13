@@ -12,6 +12,7 @@
           :y="cell.y"
           :clue="cell.clue"
           :solution="cell.solution"
+          :keyindex="cell.keyindex"
           :arrows="cell.arrow"
           :size="cellSize"
           :is-highlighted="cellIsHighlighted(cell.x, cell.y)"
@@ -36,6 +37,11 @@
         type: Number,
         required: true,
         default: 0,
+      },
+      keyword: {
+        type: String,
+        required: true,
+        default: '',
       },
       solution: {
         type: Array,
@@ -73,6 +79,7 @@
         focusY: 0,
         highlightedWord: {},
         highlightedCells: [],
+        keywordCells: [],
       }
     },
     computed: {
@@ -88,7 +95,16 @@
       window.addEventListener('click', this.handleClick);
     },
     mounted() {
-      console.log('Grid mounted.')
+      this.$store.commit('setKeyword', this.keyword);
+      this.cells.forEach((cell) => {
+        if (cell.keyindex) {
+          if (!this.keywordCells[cell.x]) {
+            this.keywordCells[cell.x] = [];
+          }
+          this.keywordCells[cell.x][cell.y] = cell.keyindex;
+        }
+      });
+      console.log('Grid mounted.');
     },
     methods: {
       setNextFieldForDirection(direction) {
@@ -219,7 +235,10 @@
           return;
         }
 
-        this.$store.commit('setSolution', char)
+        if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
+          this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[this.focusX][this.focusY])-1, 'char': char});
+          console.log(`Storing char: ${ char } on position ${ this.keywordCells[this.focusX][this.focusY]}`);
+        }
 
         // add valid value to solution array (USING VUE SET METHOD!)
         if (!this.solution[this.focusX]) {

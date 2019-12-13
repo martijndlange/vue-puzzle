@@ -129,6 +129,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -140,6 +147,11 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: false,
       "default": ''
+    },
+    keyindex: {
+      type: Number,
+      required: false,
+      "default": 0
     },
     clue: {
       type: String,
@@ -194,6 +206,9 @@ __webpack_require__.r(__webpack_exports__);
     isClue: function isClue() {
       return this.clue !== '';
     },
+    isKeyCell: function isKeyCell() {
+      return this.keyindex !== 0;
+    },
     hasArrow: function hasArrow() {
       return this.arrows.from;
     }
@@ -247,6 +262,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     width: {
@@ -258,6 +274,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Number,
       required: true,
       "default": 0
+    },
+    keyword: {
+      type: String,
+      required: true,
+      "default": ''
     },
     solution: {
       type: Array,
@@ -294,7 +315,8 @@ __webpack_require__.r(__webpack_exports__);
       focusX: 0,
       focusY: 0,
       highlightedWord: {},
-      highlightedCells: []
+      highlightedCells: [],
+      keywordCells: []
     };
   },
   computed: {
@@ -310,6 +332,18 @@ __webpack_require__.r(__webpack_exports__);
     window.addEventListener('click', this.handleClick);
   },
   mounted: function mounted() {
+    var _this = this;
+
+    this.$store.commit('setKeyword', this.keyword);
+    this.cells.forEach(function (cell) {
+      if (cell.keyindex) {
+        if (!_this.keywordCells[cell.x]) {
+          _this.keywordCells[cell.x] = [];
+        }
+
+        _this.keywordCells[cell.x][cell.y] = cell.keyindex;
+      }
+    });
     console.log('Grid mounted.');
   },
   methods: {
@@ -444,7 +478,14 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.$store.commit('setSolution', _char); // add valid value to solution array (USING VUE SET METHOD!)
+      if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
+        this.$store.commit('setKeywordCell', {
+          'position': this.keywordCells[this.focusX][this.focusY] - 1,
+          'char': _char
+        });
+        console.log("Storing char: ".concat(_char, " on position ").concat(this.keywordCells[this.focusX][this.focusY]));
+      } // add valid value to solution array (USING VUE SET METHOD!)
+
 
       if (!this.solution[this.focusX]) {
         this.$set(this.solution, this.focusX, []);
@@ -471,7 +512,7 @@ __webpack_require__.r(__webpack_exports__);
      * @param keepWord    Stay in current word (for arrow navigation)
      */
     highlightWord: function highlightWord(x, y) {
-      var _this = this;
+      var _this2 = this;
 
       var searchFor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'x';
       var searchOnce = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
@@ -491,22 +532,22 @@ __webpack_require__.r(__webpack_exports__);
             // if selected word is the same as the current highlighted word,
             // then check if there is a word available in the other direction for the xy position
             // this makes it possible to change direction on click or pressing return
-            if (!keepWord && _this.highlightedWord['id'] === word['id'] && searchOnce === false) {
-              _this.highlightWord(x, y, inverseSearchFor);
+            if (!keepWord && _this2.highlightedWord['id'] === word['id'] && searchOnce === false) {
+              _this2.highlightWord(x, y, inverseSearchFor);
 
               return;
             }
 
             found = true;
-            _this.highlightedWord = word;
-            _this.highlightedCells = [];
+            _this2.highlightedWord = word;
+            _this2.highlightedCells = [];
 
             for (var i = searchFrom; i <= searchTo; i++) {
               // depending on the search direction, the range is horizontal or vertical
               if (searchFor === 'x') {
-                _this.highlightedCells.push("".concat(i, "-").concat(searchPosOtherDirection));
+                _this2.highlightedCells.push("".concat(i, "-").concat(searchPosOtherDirection));
               } else {
-                _this.highlightedCells.push("".concat(searchPosOtherDirection, "-").concat(i));
+                _this2.highlightedCells.push("".concat(searchPosOtherDirection, "-").concat(i));
               }
             }
           }
@@ -596,6 +637,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -611,6 +667,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submitForm: function submitForm() {
       console.log('CLICK');
+    },
+
+    /*eslint-disable-next-line*/
+    keyForIndex: function keyForIndex(index) {
+      return this.$store.getters.keyForPosition(index - 1);
     }
   }
 });
@@ -629,7 +690,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(40%, #ffffff), to(#ddd));\n  background-image: linear-gradient(#ffffff 40%, #ddd 100%);\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0%;\n  left: 0%;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  -webkit-filter: FlipH;\n          filter: FlipH;\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #aaa;\n}", ""]);
+exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(40%, #ffffff), to(#ddd));\n  background-image: linear-gradient(#ffffff 40%, #ddd 100%);\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0%;\n  left: 0%;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  -webkit-filter: FlipH;\n          filter: FlipH;\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell div.key {\n  position: absolute;\n  bottom: 0;\n  right: 2px;\n  text-align: right;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #aaa;\n}", ""]);
 
 // exports
 
@@ -649,6 +710,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, ".puzzle-container {\n  position: relative;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".key-cell {\n  text-align: center;\n  font-size: 20px;\n  font-weight: bold;\n  padding-left: 0px;\n  padding-right: 0px;\n}", ""]);
 
 // exports
 
@@ -1174,6 +1254,36 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../node_modules/vue-loader/lib??vue-loader-options!./Grid.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Grid.vue?vue&type=style&index=0&lang=scss&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../node_modules/vue-loader/lib??vue-loader-options!./ParticipantForm.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1834,6 +1944,12 @@ var render = function() {
         ? _c("p", { staticClass: "cell-content solution" }, [
             _vm._v("\n    " + _vm._s(_vm.value) + "\n  ")
           ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isKeyCell
+        ? _c("div", { staticClass: "key" }, [
+            _vm._v("\n    " + _vm._s(_vm.keyindex) + "\n  ")
+          ])
         : _vm._e()
     ]
   )
@@ -1879,6 +1995,7 @@ var render = function() {
               y: cell.y,
               clue: cell.clue,
               solution: cell.solution,
+              keyindex: cell.keyindex,
               arrows: cell.arrow,
               size: _vm.cellSize,
               "is-highlighted": _vm.cellIsHighlighted(cell.x, cell.y),
@@ -1917,47 +2034,54 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("form", { attrs: { action: "" } }, [
-      _c("div", { staticClass: "field" }, [
-        _c("label", { staticClass: "label", attrs: { for: "naam" } }, [
-          _vm._v("\n        Naam:\n      ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input",
-            attrs: { id: "naam", name: "naam", type: "text" },
-            domProps: { value: _vm.naam }
-          })
+      _c("div", { staticClass: "columns" }, [
+        _c("div", { staticClass: "field column" }, [
+          _c("label", { staticClass: "label", attrs: { for: "naam" } }, [
+            _vm._v("\n          Naam:\n        ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              staticClass: "input",
+              attrs: { id: "naam", name: "naam", type: "text" },
+              domProps: { value: _vm.naam }
+            })
+          ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("label", { staticClass: "label", attrs: { for: "email" } }, [
-          _vm._v("\n        E-mailadres:\n      ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input",
-            attrs: { id: "email", name: "email", type: "text" },
-            domProps: { value: _vm.email }
-          })
+      _c("div", { staticClass: "columns" }, [
+        _c("div", { staticClass: "field column" }, [
+          _c("label", { staticClass: "label", attrs: { for: "email" } }, [
+            _vm._v("\n          E-mailadres:\n        ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              staticClass: "input",
+              attrs: { id: "email", name: "email", type: "text" },
+              domProps: { value: _vm.email }
+            })
+          ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("label", { staticClass: "label", attrs: { for: "oplossing" } }, [
-          _vm._v("\n        Oplossing:\n      ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            staticClass: "input",
-            attrs: { id: "oplossing", name: "email", type: "text" },
-            domProps: { value: _vm.solution }
-          })
-        ])
-      ]),
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "columns is-mobile" },
+        _vm._l(5, function(i) {
+          return _c("div", { key: i, staticClass: "column" }, [
+            _c("input", {
+              staticClass: "input key-cell",
+              attrs: { type: "text" },
+              domProps: { value: _vm.keyForIndex(i) }
+            })
+          ])
+        }),
+        0
+      ),
       _vm._v(" "),
       _c("input", {
         staticClass: "button is-success",
@@ -1967,7 +2091,18 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "field" }, [
+      _c("label", { staticClass: "label" }, [
+        _vm._v("\n        Oplossing:\n      ")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -15156,7 +15291,7 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store.js */ "./resources/js/store.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -15164,8 +15299,6 @@ __webpack_require__.r(__webpack_exports__);
  */
 //require('./bootstrap');
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -15185,19 +15318,10 @@ Vue.component('participant-form', __webpack_require__(/*! ./components/Participa
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
-  state: {
-    solution: ''
-  },
-  mutations: {
-    setSolution: function setSolution(state, s) {
-      state.solution += s;
-    }
-  }
-}); // eslint-disable-next-line
+ // eslint-disable-next-line
 
 var app = new Vue({
-  store: store,
+  store: _store_js__WEBPACK_IMPORTED_MODULE_0__["default"],
   el: '#app'
 });
 
@@ -15388,7 +15512,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ParticipantForm_vue_vue_type_template_id_5d8b877c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ParticipantForm.vue?vue&type=template&id=5d8b877c& */ "./resources/js/components/ParticipantForm.vue?vue&type=template&id=5d8b877c&");
 /* harmony import */ var _ParticipantForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ParticipantForm.vue?vue&type=script&lang=js& */ "./resources/js/components/ParticipantForm.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ParticipantForm.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -15396,7 +15522,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ParticipantForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ParticipantForm_vue_vue_type_template_id_5d8b877c___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ParticipantForm_vue_vue_type_template_id_5d8b877c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -15428,6 +15554,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss& ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../../node_modules/vue-loader/lib??vue-loader-options!./ParticipantForm.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticipantForm.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "./resources/js/components/ParticipantForm.vue?vue&type=template&id=5d8b877c&":
 /*!************************************************************************************!*\
   !*** ./resources/js/components/ParticipantForm.vue?vue&type=template&id=5d8b877c& ***!
@@ -15443,6 +15585,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ParticipantForm_vue_vue_type_template_id_5d8b877c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/store.js":
+/*!*******************************!*\
+  !*** ./resources/js/store.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  state: {
+    keyword: '',
+    keywordcells: ['', '', '', '', '']
+  },
+  mutations: {
+    setKeyword: function setKeyword(state, keyword) {
+      state.keyword = keyword;
+    },
+    setKeywordCell: function setKeywordCell(state, _ref) {
+      var position = _ref.position,
+          _char = _ref["char"];
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.keywordcells, position, _char);
+    }
+  },
+  getters: {
+    /*eslint-disable-next-line*/
+    keyForPosition: function keyForPosition(state) {
+      return function (pos) {
+        return state.keywordcells[pos] ? state.keywordcells[pos] : '';
+      };
+    }
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),
 

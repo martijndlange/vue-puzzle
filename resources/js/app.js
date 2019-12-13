@@ -8,10 +8,6 @@
 
 window.Vue = require('vue');
 
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -33,16 +29,7 @@ Vue.component('participant-form', require('./components/ParticipantForm.vue').de
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const store = new Vuex.Store({
-    state: {
-        solution: ''
-    },
-    mutations: {
-        setSolution (state, s) {
-            state.solution += s;
-        }
-    }
-});
+import store from './store.js';
 
 // eslint-disable-next-line
 const app = new Vue({
