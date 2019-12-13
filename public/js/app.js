@@ -217,7 +217,9 @@ __webpack_require__.r(__webpack_exports__);
     hasArrowDirection: function hasArrowDirection(from, to) {
       return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
     },
-    handleFocus: function handleFocus() {
+    handleFocus: function handleFocus(event) {
+      event.target.focus();
+
       if (!this.isClue) {
         this.$emit('cell-focussed', this.x, this.y);
       }
@@ -1929,7 +1931,7 @@ var render = function() {
       },
       on: {
         "!click": function($event) {
-          return _vm.handleFocus()
+          return _vm.handleFocus($event)
         }
       }
     },

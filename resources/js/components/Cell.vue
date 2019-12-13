@@ -15,7 +15,7 @@
       'arrow--top-right': hasArrowDirection('top', 'right')
     }"
     :style="{width: size + 'px', height: size + 'px', top: top + 'px', left: left + 'px'}"
-    @click.capture="handleFocus()"
+    @click.capture="handleFocus($event)"
   >
     <p
       v-if="isClue"
@@ -121,7 +121,8 @@
       hasArrowDirection: function (from, to) {
         return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
       },
-      handleFocus: function() {
+      handleFocus: function(event) {
+        event.target.focus();
         if (!this.isClue) {
           this.$emit('cell-focussed', this.x, this.y);
         }
