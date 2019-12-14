@@ -441,7 +441,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var container = document.getElementById('puzzle-container');
 
-      if (window.innerHeight < container.clientHeight) {
+      if (window.screen.height < container.offsetHeight) {
         var height = this.focusY * this.cellSize + container.offsetTop;
         window.scrollTo(0, height - 150);
       }
