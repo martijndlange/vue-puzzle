@@ -26,6 +26,7 @@
             class="input key-cell"
             :value="keyForIndex(i)"
             type="text"
+            readonly
           >
         </div>
       </div>

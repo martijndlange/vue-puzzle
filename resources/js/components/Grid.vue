@@ -182,9 +182,9 @@
         feedbackInput.style.setProperty('top', `${height}px`);
         window.scrollTo(0, height - 150);
       },
-      storeKeyCell(char) {
-        if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
-          this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[this.focusX][this.focusY])-1, 'char': char});
+      storeKeyCell(x, y, char) {
+        if (this.keywordCells[x] && this.keywordCells[x][y]) {
+          this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[x][y])-1, 'char': char});
         }
       },
       handleClick(event) {
@@ -228,20 +228,20 @@
         if (keyDelete) {
           if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
             this.$set(this.solution[this.focusX], this.focusY, '');
-            this.storeKeyCell('');
+            this.storeKeyCell(this.focusX, this.focusY, '');
             return;
           }
         }
 
         if (keyBackspace) {
           this.$set(this.solution[this.focusX], this.focusY, '');
+          this.storeKeyCell(this.focusX, this.focusY, '');
           if (dir === 'x' && this.focusX > wordFrom) {
             this.focusX -= 1;
           }
           if (dir === 'y' && this.focusY > wordFrom) {
             this.focusY -= 1;
           }
-          this.storeKeyCell('');
           return;
         }
 
@@ -263,7 +263,7 @@
           return;
         }
 
-        this.storeKeyCell(char);
+        this.storeKeyCell(this.focusX, this.focusY, char);
 
         // add valid value to solution array (USING VUE SET METHOD!)
         if (!this.solution[this.focusX]) {

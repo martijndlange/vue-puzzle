@@ -429,10 +429,10 @@ __webpack_require__.r(__webpack_exports__);
       feedbackInput.style.setProperty('top', "".concat(height, "px"));
       window.scrollTo(0, height - 150);
     },
-    storeKeyCell: function storeKeyCell(_char) {
-      if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
+    storeKeyCell: function storeKeyCell(x, y, _char) {
+      if (this.keywordCells[x] && this.keywordCells[x][y]) {
         this.$store.commit('setKeywordCell', {
-          'position': this.keywordCells[this.focusX][this.focusY] - 1,
+          'position': this.keywordCells[x][y] - 1,
           'char': _char
         });
       }
@@ -479,13 +479,14 @@ __webpack_require__.r(__webpack_exports__);
       if (keyDelete) {
         if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
           this.$set(this.solution[this.focusX], this.focusY, '');
-          this.storeKeyCell('');
+          this.storeKeyCell(this.focusX, this.focusY, '');
           return;
         }
       }
 
       if (keyBackspace) {
         this.$set(this.solution[this.focusX], this.focusY, '');
+        this.storeKeyCell(this.focusX, this.focusY, '');
 
         if (dir === 'x' && this.focusX > wordFrom) {
           this.focusX -= 1;
@@ -495,7 +496,6 @@ __webpack_require__.r(__webpack_exports__);
           this.focusY -= 1;
         }
 
-        this.storeKeyCell('');
         return;
       }
 
@@ -517,7 +517,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.storeKeyCell(_char2); // add valid value to solution array (USING VUE SET METHOD!)
+      this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
 
       if (!this.solution[this.focusX]) {
         this.$set(this.solution, this.focusX, []);
@@ -607,6 +607,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2100,7 +2101,7 @@ var render = function() {
           return _c("div", { key: i, staticClass: "column" }, [
             _c("input", {
               staticClass: "input key-cell",
-              attrs: { type: "text" },
+              attrs: { type: "text", readonly: "" },
               domProps: { value: _vm.keyForIndex(i) }
             })
           ])
