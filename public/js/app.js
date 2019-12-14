@@ -217,8 +217,8 @@ __webpack_require__.r(__webpack_exports__);
     hasArrowDirection: function hasArrowDirection(from, to) {
       return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
     },
-    handleFocus: function handleFocus(event) {
-      event.target.focus();
+    handleFocus: function handleFocus() {
+      document.getElementById('feedback-input').focus();
 
       if (!this.isClue) {
         this.$emit('cell-focussed', this.x, this.y);
@@ -238,6 +238,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -313,6 +318,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      feedbackInputValue: '',
       containerWidth: 1000,
       focusX: 0,
       focusY: 0,
@@ -502,6 +508,8 @@ __webpack_require__.r(__webpack_exports__);
       if (dir === 'y' && this.focusY < wordTo) {
         this.focusY += 1;
       }
+
+      this.feedbackInputValue = '';
     },
 
     /**
@@ -711,7 +719,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".puzzle-container {\n  position: relative;\n}", ""]);
+exports.push([module.i, ".puzzle-container {\n  position: relative;\n}\n#feedback-input {\n  position: fixed;\n  left: -2px;\n  top: -2px;\n  width: 1px;\n  height: 1px;\n  border: none;\n}", ""]);
 
 // exports
 
@@ -1931,7 +1939,7 @@ var render = function() {
       },
       on: {
         "!click": function($event) {
-          return _vm.handleFocus($event)
+          return _vm.handleFocus()
         }
       }
     },
@@ -2009,7 +2017,12 @@ var render = function() {
         }),
         1
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c("input", {
+      attrs: { id: "feedback-input", type: "text" },
+      domProps: { value: _vm.feedbackInputValue }
+    })
   ])
 }
 var staticRenderFns = []
@@ -2036,6 +2049,23 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("form", { attrs: { action: "" } }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "columns is-mobile" },
+        _vm._l(5, function(i) {
+          return _c("div", { key: i, staticClass: "column" }, [
+            _c("input", {
+              staticClass: "input key-cell",
+              attrs: { type: "text" },
+              domProps: { value: _vm.keyForIndex(i) }
+            })
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
       _c("div", { staticClass: "columns" }, [
         _c("div", { staticClass: "field column" }, [
           _c("label", { staticClass: "label", attrs: { for: "naam" } }, [
@@ -2067,23 +2097,6 @@ var render = function() {
           ])
         ])
       ]),
-      _vm._v(" "),
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "columns is-mobile" },
-        _vm._l(5, function(i) {
-          return _c("div", { key: i, staticClass: "column" }, [
-            _c("input", {
-              staticClass: "input key-cell",
-              attrs: { type: "text" },
-              domProps: { value: _vm.keyForIndex(i) }
-            })
-          ])
-        }),
-        0
-      ),
       _vm._v(" "),
       _c("input", {
         staticClass: "button is-success",

@@ -59,12 +59,19 @@ class PuzzleController extends Controller
 
         shuffle($cells);
 
-        // todo hier woorden gebruiken en matchen met solutions in cells
         $keyword = 'abcde';
         $placed = 1;
+        $usedWords = [];
         for ($i = 0; $i < count($cells); $i++) {
             if (empty($cells[$i]['clue']) && $placed <= strlen($keyword)) {
-                $cells[$i]['keyindex'] = $placed++;
+                // check which words contain the cell
+                $containingWords = $this->findWordsByPostion($words, $cells[$i]['x'], $cells[$i]['y']);
+                // check if any of the containing words as already used for a solution
+                $intersection = array_intersect($usedWords, $containingWords);
+                if (count($intersection) === 0) {
+                    $cells[$i]['keyindex'] = $placed++;
+                    $usedWords = array_merge($usedWords, $containingWords);
+                }
             }
         }
 
@@ -80,5 +87,20 @@ class PuzzleController extends Controller
             'words',
             'keyword'
         ));
+    }
+
+    function findWordsByPostion($words, $x, $y) {
+        $ret = [];
+        foreach ($words as $word) {
+            $rangeDir = strpos($word['x'], '-') !== false ? 'x' : 'y';
+            $fixedDir = $rangeDir === 'x' ? 'y' : 'x';
+            $range = explode('-', $word[$rangeDir]);
+            for ($i = $range[0]; $i <= $range[1]; $i++) {
+                if ($word[$fixedDir] == $$fixedDir && $i == $$rangeDir) {
+                    $ret[] = $word['id'];
+                }
+            }
+        }
+        return $ret;
     }
 }

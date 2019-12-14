@@ -1,6 +1,30 @@
 <template>
   <div>
     <form action="">
+      <div class="field">
+        <label
+          class="label"
+        >
+          Oplossing:
+        </label>
+      </div>
+     
+      <div
+        class="columns is-mobile"
+      >
+        <div
+          v-for="(i) in 5"
+          :key="i"
+          class="column"
+        >
+          <input
+            class="input key-cell"
+            :value="keyForIndex(i)"
+            type="text"
+          >
+        </div>
+      </div>
+
       <div
         class="columns"
       >
@@ -41,30 +65,6 @@
               type="text"
             >
           </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label
-          class="label"
-        >
-          Oplossing:
-        </label>
-      </div>
-     
-      <div
-        class="columns is-mobile"
-      >
-        <div
-          v-for="(i) in 5"
-          :key="i"
-          class="column"
-        >
-          <input
-            class="input key-cell"
-            :value="keyForIndex(i)"
-            type="text"
-          >
         </div>
       </div>
 

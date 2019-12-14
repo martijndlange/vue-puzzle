@@ -12,9 +12,9 @@
 </head>
 <body>
 <div id="app">
-    <div class="columns">
-        <div class="column is-1"></div>
-        <div class="column is-7">
+    <div class="columns is-desktop">
+        <div class="column"></div>
+        <div class="column">
             <grid
                 :width="{{ $gridWidth }}"
                 :height="{{ $gridHeight }}"
@@ -24,10 +24,10 @@
                 keyword="{{ $keyword }}"
             />
         </div>
-        <div class="column is-2">
+        <div class="column">
             <participant-form/>
         </div>
-        <div class="column is-1"></div>
+        <div class="column"></div>
     </div>
 </div>
 <script src="{{ asset('js/app.js')}}"></script>

@@ -22,6 +22,11 @@
         />
       </div>
     </div>
+    <input
+      id="feedback-input"
+      type="text"
+      :value="feedbackInputValue"
+    >
   </div>
 </template>
 
@@ -74,6 +79,7 @@
     },
     data() {
       return {
+        feedbackInputValue: '',
         containerWidth: 1000,
         focusX: 0,
         focusY: 0,
@@ -253,6 +259,8 @@
         if (dir === 'y' && this.focusY < wordTo) {
           this.focusY += 1;
         }
+
+        this.feedbackInputValue = '';
       },
       /**
        * Highlight a word the selected position belongs to
@@ -313,5 +321,13 @@
 <style lang="scss">
   .puzzle-container {
     position: relative;
+  }
+  #feedback-input {
+    position: fixed;
+    left: -2px;
+    top: -2px;
+    width: 1px;
+    height: 1px;
+    border: none;
   }
 </style>
