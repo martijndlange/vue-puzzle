@@ -136,6 +136,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -491,7 +497,6 @@ __webpack_require__.r(__webpack_exports__);
           'position': this.keywordCells[this.focusX][this.focusY] - 1,
           'char': _char
         });
-        console.log("Storing char: ".concat(_char, " on position ").concat(this.keywordCells[this.focusX][this.focusY]));
       } // add valid value to solution array (USING VUE SET METHOD!)
 
 
@@ -662,6 +667,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -672,6 +682,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     solution: function solution() {
       return this.$store.state.solution;
+    },
+    keyword: function keyword() {
+      return this.$store.state.keyword;
     }
   },
   methods: {
@@ -700,7 +713,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(40%, #ffffff), to(#ddd));\n  background-image: linear-gradient(#ffffff 40%, #ddd 100%);\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0%;\n  left: 0%;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  -webkit-filter: FlipH;\n          filter: FlipH;\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell div.key {\n  position: absolute;\n  bottom: 0;\n  right: 2px;\n  text-align: right;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #aaa;\n}", ""]);
+exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(40%, #ffffff), to(#ddd));\n  background-image: linear-gradient(#ffffff 40%, #ddd 100%);\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0%;\n  left: 0%;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  -webkit-filter: FlipH;\n          filter: FlipH;\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell div.key {\n  position: absolute;\n  bottom: 0;\n  right: 2px;\n  text-align: right;\n}\n.cell div.hint {\n  position: absolute;\n  bottom: 0;\n  left: 2px;\n  text-align: left;\n  color: #aaa;\n  font-size: 10px;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #aaa;\n}", ""]);
 
 // exports
 
@@ -1960,7 +1973,11 @@ var render = function() {
         ? _c("div", { staticClass: "key" }, [
             _vm._v("\n    " + _vm._s(_vm.keyindex) + "\n  ")
           ])
-        : _vm._e()
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "hint" }, [
+        _vm._v("\n    " + _vm._s(_vm.solution) + "\n  ")
+      ])
     ]
   )
 }
@@ -2049,6 +2066,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("form", { attrs: { action: "" } }, [
+      _c("input", {
+        attrs: { type: "hidden", name: "keyword" },
+        domProps: { value: _vm.keyword }
+      }),
+      _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
       _c(
@@ -15634,11 +15656,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     }
   },
   getters: {
-    /*eslint-disable-next-line*/
     keyForPosition: function keyForPosition(state) {
       return function (pos) {
         return state.keywordcells[pos] ? state.keywordcells[pos] : '';
       };
+    },
+    givenKeyword: function givenKeyword(state) {
+      return state.keywordcells.join('');
     }
   }
 });

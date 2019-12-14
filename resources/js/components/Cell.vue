@@ -36,6 +36,12 @@
     >
       {{ keyindex }}
     </div>
+
+    <div
+      class="hint"
+    >
+      {{ solution }}
+    </div>
   </div>
 </template>
 
@@ -101,16 +107,16 @@
       },
     },
     computed: {
-      left: function() {
+      left: function () {
         return (this.x - 1) * this.size;
-      } ,
-      top: function() {
+      },
+      top: function () {
         return (this.y - 1) * this.size;
       },
-      isClue: function() {
+      isClue: function () {
         return this.clue !== '';
       },
-      isKeyCell: function() {
+      isKeyCell: function () {
         return this.keyindex !== 0;
       },
       hasArrow: function () {
@@ -121,7 +127,7 @@
       hasArrowDirection: function (from, to) {
         return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
       },
-      handleFocus: function() {
+      handleFocus: function () {
         document.getElementById('feedback-input').focus();
         if (!this.isClue) {
           this.$emit('cell-focussed', this.x, this.y);
@@ -143,9 +149,10 @@
     border-right: solid 1px #444;
     border-bottom: solid 1px #444;
 
-    &.left-border{
+    &.left-border {
       border-left: solid 1px #444;
     }
+
     &.top-border {
       border-top: solid 1px #444;
     }
@@ -155,12 +162,14 @@
     }
 
     &.focus {
-      p.solution  {
+      p.solution {
         color: #fff !important;
       }
+
       &.arrow:before {
         color: #fff !important;
       }
+
       background-color: red;
       background-image: none;
     }
@@ -211,10 +220,19 @@
     }
 
     div.key {
-        position: absolute;
-        bottom: 0;
-        right: 2px;
-        text-align: right;
+      position: absolute;
+      bottom: 0;
+      right: 2px;
+      text-align: right;
+    }
+
+    div.hint {
+      position: absolute;
+      bottom: 0;
+      left: 2px;
+      text-align: left;
+      color: #aaa;
+      font-size: 10px
     }
 
     p.clue {

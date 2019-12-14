@@ -1,6 +1,11 @@
 <template>
   <div>
     <form action="">
+      <input
+        type="hidden"
+        name="keyword"
+        :value="keyword"
+      >
       <div class="field">
         <label
           class="label"
@@ -88,6 +93,9 @@
     computed: {
       solution: function () {
         return this.$store.state.solution;
+      },
+      keyword: function () {
+        return this.$store.state.keyword;
       },
     },
     methods: {

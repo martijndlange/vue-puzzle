@@ -59,17 +59,18 @@ class PuzzleController extends Controller
 
         shuffle($cells);
 
-        $keyword = 'abcde';
+        $keyword = '';
         $placed = 1;
         $usedWords = [];
         for ($i = 0; $i < count($cells); $i++) {
-            if (empty($cells[$i]['clue']) && $placed <= strlen($keyword)) {
+            if (empty($cells[$i]['clue']) && $placed <= 5) {
                 // check which words contain the cell
                 $containingWords = $this->findWordsByPostion($words, $cells[$i]['x'], $cells[$i]['y']);
                 // check if any of the containing words as already used for a solution
                 $intersection = array_intersect($usedWords, $containingWords);
                 if (count($intersection) === 0) {
                     $cells[$i]['keyindex'] = $placed++;
+                    $keyword .= $cells[$i]['solution'];
                     $usedWords = array_merge($usedWords, $containingWords);
                 }
             }
@@ -78,6 +79,7 @@ class PuzzleController extends Controller
         $cells = json_encode($cells);
         $words = json_encode($words);
         $clues = json_encode($clues);
+        $keyword = hash('sha256', $keyword);
 
         return view('puzzle', compact(
             'gridWidth',

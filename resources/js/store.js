@@ -16,10 +16,12 @@ const store = new Vuex.Store({
     }
   },
   getters: {
-    /*eslint-disable-next-line*/
     keyForPosition: state => pos =>  {
       return state.keywordcells[pos] ? state.keywordcells[pos] : '';
     },
+    givenKeyword: state => {
+      return state.keywordcells.join('');
+    }
   }
 });
 

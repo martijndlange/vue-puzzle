@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="app">
-    <div class="columns">
+    <div class="columns is-gapless">
         <div class="column"></div>
         <div class="column">
             <grid
@@ -26,7 +26,7 @@
         </div>
         <div class="column"></div>
     </div>
-    <div class="columns">
+    <div class="columns is-gapless">
         <div class="column"></div>
         <div class="column">
             <participant-form/>
