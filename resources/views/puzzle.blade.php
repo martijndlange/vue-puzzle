@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="app">
-    <div class="columns is-desktop">
+    <div class="columns">
         <div class="column"></div>
         <div class="column">
             <grid
@@ -24,6 +24,10 @@
                 keyword="{{ $keyword }}"
             />
         </div>
+        <div class="column"></div>
+    </div>
+    <div class="columns">
+        <div class="column"></div>
         <div class="column">
             <participant-form/>
         </div>
