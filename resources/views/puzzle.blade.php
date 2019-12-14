@@ -34,6 +34,7 @@
         <div class="column"></div>
     </div>
 </div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 <script src="{{ asset('js/app.js')}}"></script>
 </body>
 </html>

@@ -2,6 +2,7 @@
   <div class="container">
     <div class="row">
       <div
+        id="puzzle-container"
         class="puzzle-container"
         :style="{width: `${containerWidth}px`, height: `${containerHeight+1}px` }"
       >
@@ -190,6 +191,13 @@
         if (this.focusX === 0 && this.focusY === 0) {
           return;
         }
+
+        const container = document.getElementById('puzzle-container');
+        if (window.innerHeight < container.clientHeight) {
+          const height = (this.focusY * this.cellSize) + container.offsetTop;
+          window.scrollTo(0, height - 150);
+        }
+
         let char = String.fromCharCode(event.keyCode);
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
         const legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

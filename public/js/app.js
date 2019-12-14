@@ -276,6 +276,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     width: {
@@ -436,6 +437,13 @@ __webpack_require__.r(__webpack_exports__);
     handleKeyUp: function handleKeyUp(event) {
       if (this.focusX === 0 && this.focusY === 0) {
         return;
+      }
+
+      var container = document.getElementById('puzzle-container');
+
+      if (window.innerHeight < container.clientHeight) {
+        var height = this.focusY * this.cellSize + container.offsetTop;
+        window.scrollTo(0, height - 150);
       }
 
       var _char = String.fromCharCode(event.keyCode);
@@ -2012,7 +2020,8 @@ var render = function() {
           style: {
             width: _vm.containerWidth + "px",
             height: _vm.containerHeight + 1 + "px"
-          }
+          },
+          attrs: { id: "puzzle-container" }
         },
         _vm._l(_vm.cells, function(cell, i) {
           return _c("cell", {
