@@ -172,6 +172,25 @@
         });
         return found;
       },
+      cumulativeOffset(element) {
+        var top = 0, left = 0;
+        do {
+          top += element.offsetTop  || 0;
+          left += element.offsetLeft || 0;
+          element = element.offsetParent;
+        } while(element);
+
+        return {
+          top: top,
+          left: left
+        };
+      },
+      setScroll() {
+        const feedbackInput = document.getElementById('feedback-input');
+        const height = (parseInt(this.focusY) * (parseInt(this.cellSize)) );
+        feedbackInput.style.setProperty('top', `${height}px`);
+        window.scrollTo(0, height - 150);
+      },
       handleClick(event) {
         // when clicking or focusing outside the puzzle, reset layout
         const c = event.target.className;
@@ -185,9 +204,7 @@
       handleCellFocus: function(x, y) {
         this.focusX = x;
         this.focusY = y;
-        const container = document.getElementById('puzzle-container');
-        const height = (this.focusY * this.cellSize) + container.offsetTop;
-        window.scrollTo(0, height - 150);
+        this.setScroll();
         this.highlightWord(x, y);
       },
       handleKeyUp: function(event) {
@@ -195,9 +212,7 @@
           return;
         }
 
-        const container = document.getElementById('puzzle-container');
-        const height = (this.focusY * this.cellSize) + container.offsetTop;
-        window.scrollTo(0, height - 150);
+        this.setScroll();
 
         let char = String.fromCharCode(event.keyCode);
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
@@ -331,11 +346,12 @@
     position: relative;
   }
   #feedback-input {
-    position: fixed;
-    left: -2px;
+    position: absolute;
+    left: 22px;
     top: -2px;
-    width: 1px;
-    height: 1px;
+    width: 2px;
+    height: 2px;
     border: none;
+    opacity: 0;
   }
 </style>

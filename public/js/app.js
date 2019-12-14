@@ -418,6 +418,27 @@ __webpack_require__.r(__webpack_exports__);
       });
       return found;
     },
+    cumulativeOffset: function cumulativeOffset(element) {
+      var top = 0,
+          left = 0;
+
+      do {
+        top += element.offsetTop || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+      } while (element);
+
+      return {
+        top: top,
+        left: left
+      };
+    },
+    setScroll: function setScroll() {
+      var feedbackInput = document.getElementById('feedback-input');
+      var height = parseInt(this.focusY) * parseInt(this.cellSize);
+      feedbackInput.style.setProperty('top', "".concat(height, "px"));
+      window.scrollTo(0, height - 150);
+    },
     handleClick: function handleClick(event) {
       // when clicking or focusing outside the puzzle, reset layout
       var c = event.target.className;
@@ -432,9 +453,7 @@ __webpack_require__.r(__webpack_exports__);
     handleCellFocus: function handleCellFocus(x, y) {
       this.focusX = x;
       this.focusY = y;
-      var container = document.getElementById('puzzle-container');
-      var height = this.focusY * this.cellSize + container.offsetTop;
-      window.scrollTo(0, height - 150);
+      this.setScroll();
       this.highlightWord(x, y);
     },
     handleKeyUp: function handleKeyUp(event) {
@@ -442,9 +461,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var container = document.getElementById('puzzle-container');
-      var height = this.focusY * this.cellSize + container.offsetTop;
-      window.scrollTo(0, height - 150);
+      this.setScroll();
 
       var _char = String.fromCharCode(event.keyCode);
 
@@ -740,7 +757,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".puzzle-container {\n  position: relative;\n}\n#feedback-input {\n  position: fixed;\n  left: -2px;\n  top: -2px;\n  width: 1px;\n  height: 1px;\n  border: none;\n}", ""]);
+exports.push([module.i, ".puzzle-container {\n  position: relative;\n}\n#feedback-input {\n  position: absolute;\n  left: 22px;\n  top: -2px;\n  width: 2px;\n  height: 2px;\n  border: none;\n  opacity: 0;\n}", ""]);
 
 // exports
 
