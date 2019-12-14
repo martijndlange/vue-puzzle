@@ -193,7 +193,7 @@
         }
 
         const container = document.getElementById('puzzle-container');
-        if (window.screen.height < container.offsetHeight) {
+        if ((window.screen.height - 200) < container.offsetHeight) {
           const height = (this.focusY * this.cellSize) + container.offsetTop;
           window.scrollTo(0, height - 150);
         }
