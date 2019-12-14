@@ -67,7 +67,7 @@
               :value="email"
               class="input"
               name="email"
-              type="text"
+              type="email"
             >
           </div>
         </div>

@@ -418,26 +418,24 @@ __webpack_require__.r(__webpack_exports__);
       });
       return found;
     },
-    cumulativeOffset: function cumulativeOffset(element) {
-      var top = 0,
-          left = 0;
 
-      do {
-        top += element.offsetTop || 0;
-        left += element.offsetLeft || 0;
-        element = element.offsetParent;
-      } while (element);
-
-      return {
-        top: top,
-        left: left
-      };
-    },
+    /**
+     * make sure the hidden input field has the correct top position
+     * otherwise on mobile the screen starts to jump when switching cells
+    */
     setScroll: function setScroll() {
       var feedbackInput = document.getElementById('feedback-input');
       var height = parseInt(this.focusY) * parseInt(this.cellSize);
       feedbackInput.style.setProperty('top', "".concat(height, "px"));
       window.scrollTo(0, height - 150);
+    },
+    storeKeyCell: function storeKeyCell(_char) {
+      if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
+        this.$store.commit('setKeywordCell', {
+          'position': this.keywordCells[this.focusX][this.focusY] - 1,
+          'char': _char
+        });
+      }
     },
     handleClick: function handleClick(event) {
       // when clicking or focusing outside the puzzle, reset layout
@@ -463,7 +461,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.setScroll();
 
-      var _char = String.fromCharCode(event.keyCode);
+      var _char2 = String.fromCharCode(event.keyCode);
 
       var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
       var legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -481,6 +479,7 @@ __webpack_require__.r(__webpack_exports__);
       if (keyDelete) {
         if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
           this.$set(this.solution[this.focusX], this.focusY, '');
+          this.storeKeyCell('');
           return;
         }
       }
@@ -496,6 +495,7 @@ __webpack_require__.r(__webpack_exports__);
           this.focusY -= 1;
         }
 
+        this.storeKeyCell('');
         return;
       }
 
@@ -513,23 +513,17 @@ __webpack_require__.r(__webpack_exports__);
       } // input not legal char
 
 
-      if (legalChars.indexOf(_char) === -1) {
+      if (legalChars.indexOf(_char2) === -1) {
         return;
       }
 
-      if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
-        this.$store.commit('setKeywordCell', {
-          'position': this.keywordCells[this.focusX][this.focusY] - 1,
-          'char': _char
-        });
-      } // add valid value to solution array (USING VUE SET METHOD!)
-
+      this.storeKeyCell(_char2); // add valid value to solution array (USING VUE SET METHOD!)
 
       if (!this.solution[this.focusX]) {
         this.$set(this.solution, this.focusX, []);
       }
 
-      this.$set(this.solution[this.focusX], this.focusY, _char); // move cursor
+      this.$set(this.solution[this.focusX], this.focusY, _char2); // move cursor
 
       if (dir === 'x' && this.focusX < wordTo) {
         this.focusX += 1;
@@ -2139,7 +2133,7 @@ var render = function() {
           _c("div", { staticClass: "control" }, [
             _c("input", {
               staticClass: "input",
-              attrs: { id: "email", name: "email", type: "text" },
+              attrs: { id: "email", name: "email", type: "email" },
               domProps: { value: _vm.email }
             })
           ])

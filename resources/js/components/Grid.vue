@@ -172,24 +172,20 @@
         });
         return found;
       },
-      cumulativeOffset(element) {
-        var top = 0, left = 0;
-        do {
-          top += element.offsetTop  || 0;
-          left += element.offsetLeft || 0;
-          element = element.offsetParent;
-        } while(element);
-
-        return {
-          top: top,
-          left: left
-        };
-      },
+      /**
+       * make sure the hidden input field has the correct top position
+       * otherwise on mobile the screen starts to jump when switching cells
+      */
       setScroll() {
         const feedbackInput = document.getElementById('feedback-input');
         const height = (parseInt(this.focusY) * (parseInt(this.cellSize)) );
         feedbackInput.style.setProperty('top', `${height}px`);
         window.scrollTo(0, height - 150);
+      },
+      storeKeyCell(char) {
+        if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
+          this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[this.focusX][this.focusY])-1, 'char': char});
+        }
       },
       handleClick(event) {
         // when clicking or focusing outside the puzzle, reset layout
@@ -232,6 +228,7 @@
         if (keyDelete) {
           if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
             this.$set(this.solution[this.focusX], this.focusY, '');
+            this.storeKeyCell('');
             return;
           }
         }
@@ -244,6 +241,7 @@
           if (dir === 'y' && this.focusY > wordFrom) {
             this.focusY -= 1;
           }
+          this.storeKeyCell('');
           return;
         }
 
@@ -265,9 +263,7 @@
           return;
         }
 
-        if (this.keywordCells[this.focusX] && this.keywordCells[this.focusX][this.focusY]) {
-          this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[this.focusX][this.focusY])-1, 'char': char});
-        }
+        this.storeKeyCell(char);
 
         // add valid value to solution array (USING VUE SET METHOD!)
         if (!this.solution[this.focusX]) {
