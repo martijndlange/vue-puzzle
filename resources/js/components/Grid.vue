@@ -185,6 +185,9 @@
       handleCellFocus: function(x, y) {
         this.focusX = x;
         this.focusY = y;
+        const container = document.getElementById('puzzle-container');
+        const height = (this.focusY * this.cellSize) + container.offsetTop;
+        window.scrollTo(0, height - 150);
         this.highlightWord(x, y);
       },
       handleKeyUp: function(event) {
@@ -193,10 +196,8 @@
         }
 
         const container = document.getElementById('puzzle-container');
-        //if ((window.screen.height - 200) < container.offsetHeight) {
-          const height = (this.focusY * this.cellSize) + container.offsetTop;
-          window.scrollTo(0, height - 150);
-        //}
+        const height = (this.focusY * this.cellSize) + container.offsetTop;
+        window.scrollTo(0, height - 150);
 
         let char = String.fromCharCode(event.keyCode);
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';

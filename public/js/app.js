@@ -432,6 +432,9 @@ __webpack_require__.r(__webpack_exports__);
     handleCellFocus: function handleCellFocus(x, y) {
       this.focusX = x;
       this.focusY = y;
+      var container = document.getElementById('puzzle-container');
+      var height = this.focusY * this.cellSize + container.offsetTop;
+      window.scrollTo(0, height - 150);
       this.highlightWord(x, y);
     },
     handleKeyUp: function handleKeyUp(event) {
@@ -439,10 +442,9 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var container = document.getElementById('puzzle-container'); //if ((window.screen.height - 200) < container.offsetHeight) {
-
+      var container = document.getElementById('puzzle-container');
       var height = this.focusY * this.cellSize + container.offsetTop;
-      window.scrollTo(0, height - 150); //}
+      window.scrollTo(0, height - 150);
 
       var _char = String.fromCharCode(event.keyCode);
 
