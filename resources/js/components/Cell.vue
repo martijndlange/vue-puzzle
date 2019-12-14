@@ -158,7 +158,8 @@
     }
 
     &.highlighted {
-      background-image: linear-gradient(#ffffff 40%, #ddd 100%);
+      //background-image: linear-gradient(#ffffff 40%, #ddd 100%);
+      background-color: #FFD9D9;
     }
 
     &.focus {
@@ -243,7 +244,7 @@
 
     p.solution {
       font-size: 20px;
-      color: #aaa;
+      color: #111;
     }
   }
 </style>
