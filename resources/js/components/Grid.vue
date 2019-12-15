@@ -184,8 +184,9 @@
       setScroll() {
         const feedbackInput = document.getElementById('feedback-input');
         const height = (parseInt(this.focusY) * (parseInt(this.cellSize)) );
+        const width = (parseInt(this.focusX) * (parseInt(this.cellSize)) );
         feedbackInput.style.setProperty('top', `${height}px`);
-        window.scrollTo(0, height - 150);
+        window.scrollTo(width - 50, height - 150);
       },
       storeKeyCell(x, y, char) {
         if (this.keywordCells[x] && this.keywordCells[x][y]) {

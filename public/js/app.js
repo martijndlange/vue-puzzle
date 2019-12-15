@@ -429,8 +429,9 @@ __webpack_require__.r(__webpack_exports__);
     setScroll: function setScroll() {
       var feedbackInput = document.getElementById('feedback-input');
       var height = parseInt(this.focusY) * parseInt(this.cellSize);
+      var width = parseInt(this.focusX) * parseInt(this.cellSize);
       feedbackInput.style.setProperty('top', "".concat(height, "px"));
-      window.scrollTo(0, height - 150);
+      window.scrollTo(width - 50, height - 150);
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {
       if (this.keywordCells[x] && this.keywordCells[x][y]) {
