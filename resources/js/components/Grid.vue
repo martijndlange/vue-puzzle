@@ -98,10 +98,15 @@
       }
     },
     created: function () {
-      window.document.addEventListener('keyup', this.handleKeyUp);
-      window.document.addEventListener('click', this.handleClick);
+      //
     },
     mounted() {
+      // we have to add a seperate listener for input feedback, becaouse android doesn't response to key events...
+      // every press results in same keycode (229)
+      document.getElementById('feedback-input').addEventListener('input', this.handleInput);
+      window.document.addEventListener('keyup', this.handleKeyUp);
+      window.document.addEventListener('click', this.handleClick);
+
       this.$store.commit('setKeyword', this.keyword);
       this.cells.forEach((cell) => {
         if (cell.keyindex) {
@@ -203,6 +208,38 @@
         this.setScroll();
         this.highlightWord(x, y);
       },
+      handleInput: function(event) {
+        const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
+        const arrFromTo = this.highlightedWord[dir].split('-');
+        const wordTo = parseInt(arrFromTo[1], 10);
+        const legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // let char = String.fromCharCode(event.keyCode);
+        let char = event.target.value;
+        char = char.toUpperCase();
+
+        // input not legal char
+        if (legalChars.indexOf(char) === -1) {
+          return;
+        }
+
+        this.storeKeyCell(this.focusX, this.focusY, char);
+
+        // add valid value to solution array (USING VUE SET METHOD!)
+        if (!this.solution[this.focusX]) {
+          this.$set(this.solution, this.focusX, []);
+        }
+        this.$set(this.solution[this.focusX], this.focusY, char);
+
+        // move cursor
+        if (dir === 'x' && this.focusX < wordTo) {
+          this.focusX += 1;
+        }
+        if (dir === 'y' && this.focusY < wordTo) {
+          this.focusY += 1;
+        }
+
+        this.feedbackInputValue = '';
+      },
       handleKeyUp: function(event) {
         if (this.focusX === 0 && this.focusY === 0) {
           return;
@@ -210,12 +247,9 @@
 
         this.setScroll();
 
-        let char = String.fromCharCode(event.keyCode);
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
-        const legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const arrFromTo = this.highlightedWord[dir].split('-');
         const wordFrom = parseInt(arrFromTo[0], 10);
-        const wordTo = parseInt(arrFromTo[1], 10);
 
         const keyDelete = event.keyCode === 46;
         const keyBackspace = event.keyCode === 8;
@@ -255,31 +289,7 @@
           let direction = keyLeft || keyRight ? 'x' : 'y';
           this.setNextFieldForDirection(navigation);
           this.highlightWord(this.focusX, this.focusY, direction, false, true);
-          return;
         }
-
-        // input not legal char
-        if (legalChars.indexOf(char) === -1) {
-          return;
-        }
-
-        this.storeKeyCell(this.focusX, this.focusY, char);
-
-        // add valid value to solution array (USING VUE SET METHOD!)
-        if (!this.solution[this.focusX]) {
-          this.$set(this.solution, this.focusX, []);
-        }
-        this.$set(this.solution[this.focusX], this.focusY, char);
-
-        // move cursor
-        if (dir === 'x' && this.focusX < wordTo) {
-          this.focusX += 1;
-        }
-        if (dir === 'y' && this.focusY < wordTo) {
-          this.focusY += 1;
-        }
-
-        this.feedbackInputValue = '';
       },
       /**
        * Highlight a word the selected position belongs to

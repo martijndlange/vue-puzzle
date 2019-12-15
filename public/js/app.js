@@ -342,13 +342,16 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellSize * this.height;
     }
   },
-  created: function created() {
-    window.document.addEventListener('keyup', this.handleKeyUp);
-    window.document.addEventListener('click', this.handleClick);
+  created: function created() {//
   },
   mounted: function mounted() {
     var _this = this;
 
+    // we have to add a seperate listener for input feedback, becaouse android doesn't response to key events...
+    // every press results in same keycode (229)
+    document.getElementById('feedback-input').addEventListener('input', this.handleInput);
+    window.document.addEventListener('keyup', this.handleKeyUp);
+    window.document.addEventListener('click', this.handleClick);
     this.$store.commit('setKeyword', this.keyword);
     this.cells.forEach(function (cell) {
       if (cell.keyindex) {
@@ -454,20 +457,46 @@ __webpack_require__.r(__webpack_exports__);
       this.setScroll();
       this.highlightWord(x, y);
     },
+    handleInput: function handleInput(event) {
+      var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
+      var arrFromTo = this.highlightedWord[dir].split('-');
+      var wordTo = parseInt(arrFromTo[1], 10);
+      var legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // let char = String.fromCharCode(event.keyCode);
+
+      var _char2 = event.target.value;
+      _char2 = _char2.toUpperCase(); // input not legal char
+
+      if (legalChars.indexOf(_char2) === -1) {
+        return;
+      }
+
+      this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
+
+      if (!this.solution[this.focusX]) {
+        this.$set(this.solution, this.focusX, []);
+      }
+
+      this.$set(this.solution[this.focusX], this.focusY, _char2); // move cursor
+
+      if (dir === 'x' && this.focusX < wordTo) {
+        this.focusX += 1;
+      }
+
+      if (dir === 'y' && this.focusY < wordTo) {
+        this.focusY += 1;
+      }
+
+      this.feedbackInputValue = '';
+    },
     handleKeyUp: function handleKeyUp(event) {
       if (this.focusX === 0 && this.focusY === 0) {
         return;
       }
 
       this.setScroll();
-
-      var _char2 = String.fromCharCode(event.keyCode);
-
       var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
-      var legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var arrFromTo = this.highlightedWord[dir].split('-');
       var wordFrom = parseInt(arrFromTo[0], 10);
-      var wordTo = parseInt(arrFromTo[1], 10);
       var keyDelete = event.keyCode === 46;
       var keyBackspace = event.keyCode === 8;
       var keyLeft = event.keyCode === 37;
@@ -509,31 +538,7 @@ __webpack_require__.r(__webpack_exports__);
         var direction = keyLeft || keyRight ? 'x' : 'y';
         this.setNextFieldForDirection(navigation);
         this.highlightWord(this.focusX, this.focusY, direction, false, true);
-        return;
-      } // input not legal char
-
-
-      if (legalChars.indexOf(_char2) === -1) {
-        return;
       }
-
-      this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
-
-      if (!this.solution[this.focusX]) {
-        this.$set(this.solution, this.focusX, []);
-      }
-
-      this.$set(this.solution[this.focusX], this.focusY, _char2); // move cursor
-
-      if (dir === 'x' && this.focusX < wordTo) {
-        this.focusX += 1;
-      }
-
-      if (dir === 'y' && this.focusY < wordTo) {
-        this.focusY += 1;
-      }
-
-      this.feedbackInputValue = '';
     },
 
     /**
