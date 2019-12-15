@@ -186,8 +186,8 @@
         const width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
         if (window.innerHeight - 300 < height) {
           const feedbackInput = document.getElementById('feedback-input');
-          feedbackInput.style.setProperty('top', `${height}px`);
-          feedbackInput.style.setProperty('left', `${width}px`);
+          feedbackInput.style.setProperty('top', `${height- 150}px`);
+          feedbackInput.style.setProperty('left', `${width- 150}px`);
           window.scrollTo(width - 150, height - 150);
         }
       },
