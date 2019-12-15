@@ -182,12 +182,14 @@
        * otherwise on mobile the screen starts to jump when switching cells
       */
       setScroll() {
-        const feedbackInput = document.getElementById('feedback-input');
-        const height = (parseInt(this.focusY) * (parseInt(this.cellSize)) );
-        const width = (parseInt(this.focusX) * (parseInt(this.cellSize)) );
-        feedbackInput.style.setProperty('top', `${height}px`);
-        feedbackInput.style.setProperty('left', `${width}px`);
-        window.scrollTo(width - 150, height - 150);
+        const height = (parseInt(this.focusY) * (parseInt(this.cellSize)));
+        const width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
+        if (window.innerHeight - 300 < height) {
+          const feedbackInput = document.getElementById('feedback-input');
+          feedbackInput.style.setProperty('top', `${height}px`);
+          feedbackInput.style.setProperty('left', `${width}px`);
+          window.scrollTo(width - 150, height - 150);
+        }
       },
       storeKeyCell(x, y, char) {
         if (this.keywordCells[x] && this.keywordCells[x][y]) {

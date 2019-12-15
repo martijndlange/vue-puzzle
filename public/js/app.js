@@ -427,12 +427,15 @@ __webpack_require__.r(__webpack_exports__);
      * otherwise on mobile the screen starts to jump when switching cells
     */
     setScroll: function setScroll() {
-      var feedbackInput = document.getElementById('feedback-input');
       var height = parseInt(this.focusY) * parseInt(this.cellSize);
       var width = parseInt(this.focusX) * parseInt(this.cellSize);
-      feedbackInput.style.setProperty('top', "".concat(height, "px"));
-      feedbackInput.style.setProperty('left', "".concat(width, "px"));
-      window.scrollTo(width - 150, height - 150);
+
+      if (window.innerHeight - 300 < height) {
+        var feedbackInput = document.getElementById('feedback-input');
+        feedbackInput.style.setProperty('top', "".concat(height, "px"));
+        feedbackInput.style.setProperty('left', "".concat(width, "px"));
+        window.scrollTo(width - 150, height - 150);
+      }
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {
       if (this.keywordCells[x] && this.keywordCells[x][y]) {
