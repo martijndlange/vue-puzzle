@@ -434,7 +434,7 @@ __webpack_require__.r(__webpack_exports__);
         var feedbackInput = document.getElementById('feedback-input');
         feedbackInput.style.setProperty('top', "".concat(height - 150, "px"));
         feedbackInput.style.setProperty('left', "".concat(width - 150, "px"));
-        feedbackInput.focus();
+        window.scrollTo(width - 150, height - 150);
       }
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {
@@ -475,6 +475,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      this.setScroll();
       this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
 
       if (!this.solution[this.focusX]) {

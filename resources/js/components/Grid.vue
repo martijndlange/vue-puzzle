@@ -188,7 +188,7 @@
           const feedbackInput = document.getElementById('feedback-input');
           feedbackInput.style.setProperty('top', `${height -150}px`);
           feedbackInput.style.setProperty('left', `${width -150}px`);
-          feedbackInput.focus();
+          window.scrollTo(width - 150, height - 150);
         }
       },
       storeKeyCell(x, y, char) {
@@ -226,6 +226,7 @@
           return;
         }
 
+        this.setScroll();
         this.storeKeyCell(this.focusX, this.focusY, char);
 
         // add valid value to solution array (USING VUE SET METHOD!)
