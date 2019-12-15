@@ -343,8 +343,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    window.addEventListener('keyup', this.handleKeyUp);
-    window.addEventListener('click', this.handleClick);
+    window.document.addEventListener('keyup', this.handleKeyUp);
+    window.document.addEventListener('click', this.handleClick);
   },
   mounted: function mounted() {
     var _this = this;

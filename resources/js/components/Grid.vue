@@ -98,8 +98,8 @@
       }
     },
     created: function () {
-      window.addEventListener('keyup', this.handleKeyUp);
-      window.addEventListener('click', this.handleClick);
+      window.document.addEventListener('keyup', this.handleKeyUp);
+      window.document.addEventListener('click', this.handleClick);
     },
     mounted() {
       this.$store.commit('setKeyword', this.keyword);
