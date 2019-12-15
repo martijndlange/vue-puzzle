@@ -431,7 +431,8 @@ __webpack_require__.r(__webpack_exports__);
       var height = parseInt(this.focusY) * parseInt(this.cellSize);
       var width = parseInt(this.focusX) * parseInt(this.cellSize);
       feedbackInput.style.setProperty('top', "".concat(height, "px"));
-      window.scrollTo(width - 50, height - 150);
+      feedbackInput.style.setProperty('left', "".concat(width, "px"));
+      window.scrollTo(width - 150, height - 150);
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {
       if (this.keywordCells[x] && this.keywordCells[x][y]) {
