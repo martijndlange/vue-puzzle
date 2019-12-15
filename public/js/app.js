@@ -432,9 +432,9 @@ __webpack_require__.r(__webpack_exports__);
 
       if (window.innerHeight - 300 < height) {
         var feedbackInput = document.getElementById('feedback-input');
-        feedbackInput.style.setProperty('top', "".concat(height - 50, "px"));
-        feedbackInput.style.setProperty('left', "".concat(width - 50, "px"));
-        window.scrollTo(width - 50, height - 50);
+        feedbackInput.style.setProperty('top', "".concat(height - 150, "px"));
+        feedbackInput.style.setProperty('left', "".concat(width - 150, "px"));
+        window.scrollTo(width - 150, height - 150);
       }
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {

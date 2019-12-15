@@ -186,9 +186,9 @@
         const width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
         if (window.innerHeight - 300 < height) {
           const feedbackInput = document.getElementById('feedback-input');
-          feedbackInput.style.setProperty('top', `${height -50}px`);
-          feedbackInput.style.setProperty('left', `${width -50}px`);
-          window.scrollTo(width - 50, height - 50);
+          feedbackInput.style.setProperty('top', `${height -150}px`);
+          feedbackInput.style.setProperty('left', `${width -150}px`);
+          window.scrollTo(width - 150, height - 150);
         }
       },
       storeKeyCell(x, y, char) {
