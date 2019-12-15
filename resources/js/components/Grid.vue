@@ -188,7 +188,7 @@
           const feedbackInput = document.getElementById('feedback-input');
           feedbackInput.style.setProperty('top', `${height -50}px`);
           feedbackInput.style.setProperty('left', `${width -50}px`);
-          window.scrollTo(width - 150, height - 150);
+          window.scrollTo(width - 50, height - 50);
         }
       },
       storeKeyCell(x, y, char) {

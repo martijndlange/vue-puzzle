@@ -434,7 +434,7 @@ __webpack_require__.r(__webpack_exports__);
         var feedbackInput = document.getElementById('feedback-input');
         feedbackInput.style.setProperty('top', "".concat(height - 50, "px"));
         feedbackInput.style.setProperty('left', "".concat(width - 50, "px"));
-        window.scrollTo(width - 150, height - 150);
+        window.scrollTo(width - 50, height - 50);
       }
     },
     storeKeyCell: function storeKeyCell(x, y, _char) {
