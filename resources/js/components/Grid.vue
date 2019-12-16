@@ -421,6 +421,6 @@
     width: 2px;
     height: 2px;
     border: none;
-    opacity: 0;
+    opacity: 1;
   }
 </style>
