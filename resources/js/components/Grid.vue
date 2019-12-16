@@ -177,11 +177,11 @@
         let width = (parseInt(this.focusX+1) * (parseInt(this.cellSize)));
         height = height < 0 ? 0 : height;
         width = width < 0 ? 0 : width;
-        //if (window.innerHeight - 300 < height) {
+        if (window.innerHeight - 300 < height || window.innerWidth - 300 < width) {
           feedbackInput.style.setProperty('top', `${height}px`);
           feedbackInput.style.setProperty('left', `${width}px`);
-          //window.scrollTo(width, height);
-        //}
+          window.scrollTo(width, height);
+        }
         feedbackInput.focus();
       },
       /**
