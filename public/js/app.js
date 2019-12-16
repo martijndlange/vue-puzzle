@@ -422,14 +422,12 @@ __webpack_require__.r(__webpack_exports__);
     */
     setScroll: function setScroll() {
       var feedbackInput = document.getElementById('feedback-input');
-      var height = parseInt(this.focusY) * parseInt(this.cellSize);
-      var width = parseInt(this.focusX) * parseInt(this.cellSize);
+      var height = parseInt(this.focusY - 1) * parseInt(this.cellSize);
+      var width = parseInt(this.focusX - 1) * parseInt(this.cellSize); //if (window.innerHeight - 300 < height) {
 
-      if (window.innerHeight - 300 < height) {
-        feedbackInput.style.setProperty('top', "".concat(height, "px"));
-        feedbackInput.style.setProperty('left', "".concat(width, "px"));
-        window.scrollTo(width, height);
-      }
+      feedbackInput.style.setProperty('top', "".concat(height, "px"));
+      feedbackInput.style.setProperty('left', "".concat(width, "px"));
+      window.scrollTo(width, height); //}
 
       feedbackInput.focus();
     },
@@ -828,7 +826,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".puzzle-container {\n  position: relative;\n}\n#feedback-input {\n  position: absolute;\n  left: 22px;\n  top: -2px;\n  width: 2px;\n  height: 2px;\n  border: none;\n  opacity: 0;\n}", ""]);
+exports.push([module.i, ".puzzle-container {\n  position: relative;\n}\n#feedback-input {\n  position: absolute;\n  background-color: green;\n  left: 0;\n  top: 0;\n  width: 5px;\n  height: 5px;\n  border: none;\n  opacity: 1;\n}", ""]);
 
 // exports
 

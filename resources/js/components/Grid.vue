@@ -173,13 +173,13 @@
       */
       setScroll() {
         const feedbackInput = document.getElementById('feedback-input');
-        let height = (parseInt(this.focusY) * (parseInt(this.cellSize)));
-        let width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
-        if (window.innerHeight - 300 < height) {
+        let height = (parseInt(this.focusY-1) * (parseInt(this.cellSize)));
+        let width = (parseInt(this.focusX-1) * (parseInt(this.cellSize)));
+        //if (window.innerHeight - 300 < height) {
           feedbackInput.style.setProperty('top', `${height}px`);
           feedbackInput.style.setProperty('left', `${width}px`);
           window.scrollTo(width, height);
-        }
+        //}
         feedbackInput.focus();
       },
       /**
@@ -416,10 +416,11 @@
   }
   #feedback-input {
     position: absolute;
-    left: 22px;
-    top: -2px;
-    width: 2px;
-    height: 2px;
+    background-color: green;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 5px;
     border: none;
     opacity: 1;
   }
