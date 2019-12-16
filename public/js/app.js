@@ -422,8 +422,8 @@ __webpack_require__.r(__webpack_exports__);
     */
     setScroll: function setScroll() {
       var feedbackInput = document.getElementById('feedback-input');
-      var height = parseInt(this.focusY - 1) * parseInt(this.cellSize);
-      var width = parseInt(this.focusX - 1) * parseInt(this.cellSize); //if (window.innerHeight - 300 < height) {
+      var height = parseInt(this.focusY - 2) * parseInt(this.cellSize);
+      var width = parseInt(this.focusX + 1) * parseInt(this.cellSize); //if (window.innerHeight - 300 < height) {
 
       feedbackInput.style.setProperty('top', "".concat(height, "px"));
       feedbackInput.style.setProperty('left', "".concat(width, "px"));

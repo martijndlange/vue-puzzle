@@ -173,8 +173,8 @@
       */
       setScroll() {
         const feedbackInput = document.getElementById('feedback-input');
-        let height = (parseInt(this.focusY-1) * (parseInt(this.cellSize)));
-        let width = (parseInt(this.focusX-1) * (parseInt(this.cellSize)));
+        let height = (parseInt(this.focusY-2) * (parseInt(this.cellSize)));
+        let width = (parseInt(this.focusX+1) * (parseInt(this.cellSize)));
         //if (window.innerHeight - 300 < height) {
           feedbackInput.style.setProperty('top', `${height}px`);
           feedbackInput.style.setProperty('left', `${width}px`);
