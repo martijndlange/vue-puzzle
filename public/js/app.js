@@ -425,13 +425,11 @@ __webpack_require__.r(__webpack_exports__);
       var height = parseInt(this.focusY - 2) * parseInt(this.cellSize);
       var width = parseInt(this.focusX + 1) * parseInt(this.cellSize);
       height = height < 0 ? 0 : height;
-      width = width < 0 ? 0 : width;
+      width = width < 0 ? 0 : width; //if (window.innerHeight - 300 < height || window.innerWidth - 300 < width) {
 
-      if (window.innerHeight - 300 < height || window.innerWidth - 300 < width) {
-        feedbackInput.style.setProperty('top', "".concat(height, "px"));
-        feedbackInput.style.setProperty('left', "".concat(width, "px"));
-        window.scrollTo(width, height);
-      }
+      feedbackInput.style.setProperty('top', "".concat(height, "px"));
+      feedbackInput.style.setProperty('left', "".concat(width, "px"));
+      window.scrollTo(width, height); //}
 
       feedbackInput.focus();
     },
