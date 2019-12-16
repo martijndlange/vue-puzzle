@@ -180,7 +180,7 @@
         //if (window.innerHeight - 300 < height) {
           feedbackInput.style.setProperty('top', `${height}px`);
           feedbackInput.style.setProperty('left', `${width}px`);
-          window.scrollTo(width, height);
+          //window.scrollTo(width, height);
         //}
         feedbackInput.focus();
       },
@@ -424,6 +424,6 @@
     width: 5px;
     height: 5px;
     border: none;
-    opacity: 1;
+    opacity: 0;
   }
 </style>
