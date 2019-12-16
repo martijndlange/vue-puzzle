@@ -427,7 +427,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (window.innerHeight - 300 < height) {
         feedbackInput.style.setProperty('top', "".concat(height, "px"));
-        feedbackInput.style.setProperty('left', "".concat(width, "px")); // window.scrollTo(width - 150, height - 150);
+        feedbackInput.style.setProperty('left', "".concat(width, "px"));
+        window.scrollTo(width, height);
       }
 
       feedbackInput.focus();

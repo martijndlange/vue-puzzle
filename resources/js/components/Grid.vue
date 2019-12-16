@@ -178,7 +178,7 @@
         if (window.innerHeight - 300 < height) {
           feedbackInput.style.setProperty('top', `${height}px`);
           feedbackInput.style.setProperty('left', `${width}px`);
-          // window.scrollTo(width - 150, height - 150);
+          window.scrollTo(width, height);
         }
         feedbackInput.focus();
       },
