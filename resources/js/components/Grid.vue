@@ -105,7 +105,7 @@
       // every press results in same keycode (229)
       document.getElementById('feedback-input').addEventListener('input', this.handleInput);
       window.document.addEventListener('keyup', this.handleKeyUp);
-      window.document.addEventListener('click', this.handleClick);
+      window.document.addEventListener('click', this.handleWindowClick);
 
       this.$store.commit('setKeyword', this.keyword);
       this.cells.forEach((cell) => {
@@ -117,49 +117,38 @@
         }
       });
       console.log('Grid mounted.');
+      // todo add eventlistener to scrollx and y change, si we atomatically trigger setscroll!!!!!!!!!
     },
     methods: {
-      setNextFieldForDirection(direction) {
-        let pos = direction === 'up' || direction === 'left' ? 0 : 1000;
-        let focusX = this.focusX;
-        let focusY = this.focusY;
-        let changed = false;
-
-          this.cells.forEach(function (cell) {
-            if (
-              (direction === 'up' && cell.x === focusX && cell.y < focusY && cell.y > pos && cell.solution) ||
-              (direction === 'down' && cell.x === focusX && cell.y > focusY && cell.y < pos && cell.solution)
-            ) {
-              pos = cell.y;
-              changed = true;
-            }
-            if (
-              (direction === 'left' && cell.y === focusY && cell.x < focusX && cell.x > pos && cell.solution) ||
-              (direction === 'right' && cell.y === focusY && cell.x > focusX && cell.x < pos && cell.solution)
-
-            ) {
-              pos = cell.x;
-              changed = true;
-            }
-          });
-          if (changed && (direction === 'up' || direction === 'down')) {
-            this.focusY = pos;
-          }
-          if (changed && (direction === 'left' || direction === 'right')) {
-            this.focusX = pos;
-          }
-      },
+      /**
+       * Cell component getter: return current cell value
+       *
+       * @number xCell
+       * @number yCell
+       */
       cellValue: function(xCell, yCell) {
         if (this.solution[xCell] && this.solution[xCell][yCell]) {
           return this.solution[xCell][yCell];
         }
         return '';
       },
+      /**
+       * Cell component getter: return if cell has focus
+       *
+       * @number xCell
+       * @number yCell
+       */
       cellHasFocus: function(xCell, yCell) {
         const x = parseInt(xCell, 10);
         const y = parseInt(yCell, 10);
         return x === this.focusX && y === this.focusY;
       },
+      /**
+       * Cell component getter: return if cell is highlighted
+       *
+       * @number xCell
+       * @number yCell
+       */
       cellIsHighlighted: function(xCell, yCell) {
         if (this.highlightedCells.length === 0) {
           return false;
@@ -178,26 +167,41 @@
         return found;
       },
       /**
-       * make sure the hidden input field has the correct top position
-       * otherwise on mobile the screen starts to jump when switching cells
+       * Set scroll position of document based on cell focus.
+       * Make sure the hidden input field has the correct xy position
+       * otherwise on mobile the screen starts to jump when switching cells.
       */
       setScroll() {
-        const height = (parseInt(this.focusY) * (parseInt(this.cellSize)));
-        const width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
+        const feedbackInput = document.getElementById('feedback-input');
+        let height = (parseInt(this.focusY) * (parseInt(this.cellSize)));
+        let width = (parseInt(this.focusX) * (parseInt(this.cellSize)));
         if (window.innerHeight - 300 < height) {
-          const feedbackInput = document.getElementById('feedback-input');
-          feedbackInput.style.setProperty('top', `${height -150}px`);
-          feedbackInput.style.setProperty('left', `${width -150}px`);
-          window.scrollTo(width - 150, height - 150);
+          feedbackInput.style.setProperty('top', `${height}px`);
+          feedbackInput.style.setProperty('left', `${width}px`);
+          // window.scrollTo(width - 150, height - 150);
         }
+        feedbackInput.focus();
       },
+      /**
+       * Check is current cell is a key cell for the final keyword
+       * If so than save cell to store
+       *
+       * @number x
+       * @number y
+       * @string char
+       */
       storeKeyCell(x, y, char) {
         if (this.keywordCells[x] && this.keywordCells[x][y]) {
           this.$store.commit('setKeywordCell', { 'position': (this.keywordCells[x][y])-1, 'char': char});
         }
       },
-      handleClick(event) {
-        // when clicking or focusing outside the puzzle, reset layout
+      /**
+       * Handle click events on window.
+       * This toggles focus of puzzle.
+       *
+       * @event event
+       */
+      handleWindowClick(event) {
         const c = event.target.className;
         if (c.indexOf('cell') === -1 && c.indexOf('cell-content') === -1) {
           this.focusX = 0;
@@ -206,12 +210,24 @@
           this.highlightedCells = [];
         }
       },
+      /**
+       * Handle click (focus) on puzzle cell.
+       * Propagates up from Cell component.
+       *
+       * @number x
+       * @number y
+       */
       handleCellFocus: function(x, y) {
         this.focusX = x;
         this.focusY = y;
         this.setScroll();
         this.highlightWord(x, y);
       },
+      /**
+       * Handle textual key input.
+       *
+       * @event event
+       */
       handleInput: function(event) {
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
         const arrFromTo = this.highlightedWord[dir].split('-');
@@ -226,7 +242,6 @@
           return;
         }
 
-        this.setScroll();
         this.storeKeyCell(this.focusX, this.focusY, char);
 
         // add valid value to solution array (USING VUE SET METHOD!)
@@ -243,14 +258,18 @@
           this.focusY += 1;
         }
 
+        this.setScroll();
         this.feedbackInputValue = '';
       },
+      /**
+       * Handle key input other than text (e.g. navigation e.d.).
+       *
+       * @event event
+       */
       handleKeyUp: function(event) {
         if (this.focusX === 0 && this.focusY === 0) {
           return;
         }
-
-        this.setScroll();
 
         const dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
         const arrFromTo = this.highlightedWord[dir].split('-');
@@ -268,6 +287,7 @@
           if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
             this.$set(this.solution[this.focusX], this.focusY, '');
             this.storeKeyCell(this.focusX, this.focusY, '');
+            this.setScroll();
             return;
           }
         }
@@ -281,11 +301,13 @@
           if (dir === 'y' && this.focusY > wordFrom) {
             this.focusY -= 1;
           }
+          this.setScroll();
           return;
         }
 
         if (keyReturn) {
           this.highlightWord(this.focusX, this.focusY);
+          this.setScroll();
           return;
         }
 
@@ -294,16 +316,52 @@
           let direction = keyLeft || keyRight ? 'x' : 'y';
           this.setNextFieldForDirection(navigation);
           this.highlightWord(this.focusX, this.focusY, direction, false, true);
+          this.setScroll();
         }
       },
       /**
-       * Highlight a word the selected position belongs to
+       * Calculate focus of next cell based on given direction.
        *
-       * @param x           X-position of focused field
-       * @param y           Y-position of focused field
-       * @param searchFor   Direction in which to start searching for matching word
-       * @param searchOnce  Perform search once, skip other direction (for 2nd search)
-       * @param keepWord    Stay in current word (for arrow navigation)
+       * @string direction   Direction in which to navigate
+       */
+      setNextFieldForDirection(direction) {
+        let pos = direction === 'up' || direction === 'left' ? 0 : 1000;
+        let focusX = this.focusX;
+        let focusY = this.focusY;
+        let changed = false;
+
+        this.cells.forEach(function (cell) {
+          if (
+            (direction === 'up' && cell.x === focusX && cell.y < focusY && cell.y > pos && cell.solution) ||
+            (direction === 'down' && cell.x === focusX && cell.y > focusY && cell.y < pos && cell.solution)
+          ) {
+            pos = cell.y;
+            changed = true;
+          }
+          if (
+            (direction === 'left' && cell.y === focusY && cell.x < focusX && cell.x > pos && cell.solution) ||
+            (direction === 'right' && cell.y === focusY && cell.x > focusX && cell.x < pos && cell.solution)
+
+          ) {
+            pos = cell.x;
+            changed = true;
+          }
+        });
+        if (changed && (direction === 'up' || direction === 'down')) {
+          this.focusY = pos;
+        }
+        if (changed && (direction === 'left' || direction === 'right')) {
+          this.focusX = pos;
+        }
+      },
+      /**
+       * Highlight a word the selected position belongs to.
+       *
+       * @number x            X-position of focused field
+       * @number y            Y-position of focused field
+       * @string searchFor    Direction in which to start searching for matching word
+       * @boolean searchOnce  Perform search once, skip other direction (for 2nd search)
+       * @boolean keepWord    Stay in current word (for arrow navigation)
        */
       highlightWord(x, y, searchFor = 'x', searchOnce = false, keepWord = false) {
         let found = false;

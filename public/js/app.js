@@ -224,8 +224,6 @@ __webpack_require__.r(__webpack_exports__);
       return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
     },
     handleFocus: function handleFocus() {
-      document.getElementById('feedback-input').focus();
-
       if (!this.isClue) {
         this.$emit('cell-focussed', this.x, this.y);
       }
@@ -351,7 +349,7 @@ __webpack_require__.r(__webpack_exports__);
     // every press results in same keycode (229)
     document.getElementById('feedback-input').addEventListener('input', this.handleInput);
     window.document.addEventListener('keyup', this.handleKeyUp);
-    window.document.addEventListener('click', this.handleClick);
+    window.document.addEventListener('click', this.handleWindowClick);
     this.$store.commit('setKeyword', this.keyword);
     this.cells.forEach(function (cell) {
       if (cell.keyindex) {
@@ -362,9 +360,231 @@ __webpack_require__.r(__webpack_exports__);
         _this.keywordCells[cell.x][cell.y] = cell.keyindex;
       }
     });
-    console.log('Grid mounted.');
+    console.log('Grid mounted.'); // todo add eventlistener to scrollx and y change, si we atomatically trigger setscroll!!!!!!!!!
   },
   methods: {
+    /**
+     * Cell component getter: return current cell value
+     *
+     * @number xCell
+     * @number yCell
+     */
+    cellValue: function cellValue(xCell, yCell) {
+      if (this.solution[xCell] && this.solution[xCell][yCell]) {
+        return this.solution[xCell][yCell];
+      }
+
+      return '';
+    },
+
+    /**
+     * Cell component getter: return if cell has focus
+     *
+     * @number xCell
+     * @number yCell
+     */
+    cellHasFocus: function cellHasFocus(xCell, yCell) {
+      var x = parseInt(xCell, 10);
+      var y = parseInt(yCell, 10);
+      return x === this.focusX && y === this.focusY;
+    },
+
+    /**
+     * Cell component getter: return if cell is highlighted
+     *
+     * @number xCell
+     * @number yCell
+     */
+    cellIsHighlighted: function cellIsHighlighted(xCell, yCell) {
+      if (this.highlightedCells.length === 0) {
+        return false;
+      }
+
+      var x = parseInt(xCell, 10);
+      var y = parseInt(yCell, 10);
+      var found = false;
+      this.highlightedCells.forEach(function (cell) {
+        var arrXY = cell.split('-');
+        var xCheck = parseInt(arrXY[0], 10);
+        var yCheck = parseInt(arrXY[1], 10);
+
+        if (x === xCheck && y === yCheck) {
+          found = true;
+        }
+      });
+      return found;
+    },
+
+    /**
+     * Set scroll position of document based on cell focus.
+     * Make sure the hidden input field has the correct xy position
+     * otherwise on mobile the screen starts to jump when switching cells.
+    */
+    setScroll: function setScroll() {
+      var feedbackInput = document.getElementById('feedback-input');
+      var height = parseInt(this.focusY) * parseInt(this.cellSize);
+      var width = parseInt(this.focusX) * parseInt(this.cellSize);
+
+      if (window.innerHeight - 300 < height) {
+        feedbackInput.style.setProperty('top', "".concat(height, "px"));
+        feedbackInput.style.setProperty('left', "".concat(width, "px")); // window.scrollTo(width - 150, height - 150);
+      }
+
+      feedbackInput.focus();
+    },
+
+    /**
+     * Check is current cell is a key cell for the final keyword
+     * If so than save cell to store
+     *
+     * @number x
+     * @number y
+     * @string char
+     */
+    storeKeyCell: function storeKeyCell(x, y, _char) {
+      if (this.keywordCells[x] && this.keywordCells[x][y]) {
+        this.$store.commit('setKeywordCell', {
+          'position': this.keywordCells[x][y] - 1,
+          'char': _char
+        });
+      }
+    },
+
+    /**
+     * Handle click events on window.
+     * This toggles focus of puzzle.
+     *
+     * @event event
+     */
+    handleWindowClick: function handleWindowClick(event) {
+      var c = event.target.className;
+
+      if (c.indexOf('cell') === -1 && c.indexOf('cell-content') === -1) {
+        this.focusX = 0;
+        this.focusY = 0;
+        this.highlightedWord = {};
+        this.highlightedCells = [];
+      }
+    },
+
+    /**
+     * Handle click (focus) on puzzle cell.
+     * Propagates up from Cell component.
+     *
+     * @number x
+     * @number y
+     */
+    handleCellFocus: function handleCellFocus(x, y) {
+      this.focusX = x;
+      this.focusY = y;
+      this.setScroll();
+      this.highlightWord(x, y);
+    },
+
+    /**
+     * Handle textual key input.
+     *
+     * @event event
+     */
+    handleInput: function handleInput(event) {
+      var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
+      var arrFromTo = this.highlightedWord[dir].split('-');
+      var wordTo = parseInt(arrFromTo[1], 10);
+      var legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // let char = String.fromCharCode(event.keyCode);
+
+      var _char2 = event.target.value;
+      _char2 = _char2.toUpperCase(); // input not legal char
+
+      if (legalChars.indexOf(_char2) === -1) {
+        return;
+      }
+
+      this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
+
+      if (!this.solution[this.focusX]) {
+        this.$set(this.solution, this.focusX, []);
+      }
+
+      this.$set(this.solution[this.focusX], this.focusY, _char2); // move cursor
+
+      if (dir === 'x' && this.focusX < wordTo) {
+        this.focusX += 1;
+      }
+
+      if (dir === 'y' && this.focusY < wordTo) {
+        this.focusY += 1;
+      }
+
+      this.setScroll();
+      this.feedbackInputValue = '';
+    },
+
+    /**
+     * Handle key input other than text (e.g. navigation e.d.).
+     *
+     * @event event
+     */
+    handleKeyUp: function handleKeyUp(event) {
+      if (this.focusX === 0 && this.focusY === 0) {
+        return;
+      }
+
+      var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
+      var arrFromTo = this.highlightedWord[dir].split('-');
+      var wordFrom = parseInt(arrFromTo[0], 10);
+      var keyDelete = event.keyCode === 46;
+      var keyBackspace = event.keyCode === 8;
+      var keyLeft = event.keyCode === 37;
+      var keyUp = event.keyCode === 38;
+      var keyRight = event.keyCode === 39;
+      var keyDown = event.keyCode === 40;
+      var keyReturn = event.keyCode === 13;
+
+      if (keyDelete) {
+        if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
+          this.$set(this.solution[this.focusX], this.focusY, '');
+          this.storeKeyCell(this.focusX, this.focusY, '');
+          this.setScroll();
+          return;
+        }
+      }
+
+      if (keyBackspace) {
+        this.$set(this.solution[this.focusX], this.focusY, '');
+        this.storeKeyCell(this.focusX, this.focusY, '');
+
+        if (dir === 'x' && this.focusX > wordFrom) {
+          this.focusX -= 1;
+        }
+
+        if (dir === 'y' && this.focusY > wordFrom) {
+          this.focusY -= 1;
+        }
+
+        this.setScroll();
+        return;
+      }
+
+      if (keyReturn) {
+        this.highlightWord(this.focusX, this.focusY);
+        this.setScroll();
+        return;
+      }
+
+      if (keyLeft || keyUp || keyRight || keyDown) {
+        var navigation = keyUp ? 'up' : keyRight ? 'right' : keyDown ? 'down' : 'left';
+        var direction = keyLeft || keyRight ? 'x' : 'y';
+        this.setNextFieldForDirection(navigation);
+        this.highlightWord(this.focusX, this.focusY, direction, false, true);
+        this.setScroll();
+      }
+    },
+
+    /**
+     * Calculate focus of next cell based on given direction.
+     *
+     * @string direction   Direction in which to navigate
+     */
     setNextFieldForDirection: function setNextFieldForDirection(direction) {
       var pos = direction === 'up' || direction === 'left' ? 0 : 1000;
       var focusX = this.focusX;
@@ -390,171 +610,15 @@ __webpack_require__.r(__webpack_exports__);
         this.focusX = pos;
       }
     },
-    cellValue: function cellValue(xCell, yCell) {
-      if (this.solution[xCell] && this.solution[xCell][yCell]) {
-        return this.solution[xCell][yCell];
-      }
-
-      return '';
-    },
-    cellHasFocus: function cellHasFocus(xCell, yCell) {
-      var x = parseInt(xCell, 10);
-      var y = parseInt(yCell, 10);
-      return x === this.focusX && y === this.focusY;
-    },
-    cellIsHighlighted: function cellIsHighlighted(xCell, yCell) {
-      if (this.highlightedCells.length === 0) {
-        return false;
-      }
-
-      var x = parseInt(xCell, 10);
-      var y = parseInt(yCell, 10);
-      var found = false;
-      this.highlightedCells.forEach(function (cell) {
-        var arrXY = cell.split('-');
-        var xCheck = parseInt(arrXY[0], 10);
-        var yCheck = parseInt(arrXY[1], 10);
-
-        if (x === xCheck && y === yCheck) {
-          found = true;
-        }
-      });
-      return found;
-    },
 
     /**
-     * make sure the hidden input field has the correct top position
-     * otherwise on mobile the screen starts to jump when switching cells
-    */
-    setScroll: function setScroll() {
-      var height = parseInt(this.focusY) * parseInt(this.cellSize);
-      var width = parseInt(this.focusX) * parseInt(this.cellSize);
-
-      if (window.innerHeight - 300 < height) {
-        var feedbackInput = document.getElementById('feedback-input');
-        feedbackInput.style.setProperty('top', "".concat(height - 150, "px"));
-        feedbackInput.style.setProperty('left', "".concat(width - 150, "px"));
-        window.scrollTo(width - 150, height - 150);
-      }
-    },
-    storeKeyCell: function storeKeyCell(x, y, _char) {
-      if (this.keywordCells[x] && this.keywordCells[x][y]) {
-        this.$store.commit('setKeywordCell', {
-          'position': this.keywordCells[x][y] - 1,
-          'char': _char
-        });
-      }
-    },
-    handleClick: function handleClick(event) {
-      // when clicking or focusing outside the puzzle, reset layout
-      var c = event.target.className;
-
-      if (c.indexOf('cell') === -1 && c.indexOf('cell-content') === -1) {
-        this.focusX = 0;
-        this.focusY = 0;
-        this.highlightedWord = {};
-        this.highlightedCells = [];
-      }
-    },
-    handleCellFocus: function handleCellFocus(x, y) {
-      this.focusX = x;
-      this.focusY = y;
-      this.setScroll();
-      this.highlightWord(x, y);
-    },
-    handleInput: function handleInput(event) {
-      var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
-      var arrFromTo = this.highlightedWord[dir].split('-');
-      var wordTo = parseInt(arrFromTo[1], 10);
-      var legalChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // let char = String.fromCharCode(event.keyCode);
-
-      var _char2 = event.target.value;
-      _char2 = _char2.toUpperCase(); // input not legal char
-
-      if (legalChars.indexOf(_char2) === -1) {
-        return;
-      }
-
-      this.setScroll();
-      this.storeKeyCell(this.focusX, this.focusY, _char2); // add valid value to solution array (USING VUE SET METHOD!)
-
-      if (!this.solution[this.focusX]) {
-        this.$set(this.solution, this.focusX, []);
-      }
-
-      this.$set(this.solution[this.focusX], this.focusY, _char2); // move cursor
-
-      if (dir === 'x' && this.focusX < wordTo) {
-        this.focusX += 1;
-      }
-
-      if (dir === 'y' && this.focusY < wordTo) {
-        this.focusY += 1;
-      }
-
-      this.feedbackInputValue = '';
-    },
-    handleKeyUp: function handleKeyUp(event) {
-      if (this.focusX === 0 && this.focusY === 0) {
-        return;
-      }
-
-      this.setScroll();
-      var dir = this.highlightedWord.x.indexOf('-') >= 0 ? 'x' : 'y';
-      var arrFromTo = this.highlightedWord[dir].split('-');
-      var wordFrom = parseInt(arrFromTo[0], 10);
-      var keyDelete = event.keyCode === 46;
-      var keyBackspace = event.keyCode === 8;
-      var keyLeft = event.keyCode === 37;
-      var keyUp = event.keyCode === 38;
-      var keyRight = event.keyCode === 39;
-      var keyDown = event.keyCode === 40;
-      var keyReturn = event.keyCode === 13;
-
-      if (keyDelete) {
-        if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
-          this.$set(this.solution[this.focusX], this.focusY, '');
-          this.storeKeyCell(this.focusX, this.focusY, '');
-          return;
-        }
-      }
-
-      if (keyBackspace) {
-        this.$set(this.solution[this.focusX], this.focusY, '');
-        this.storeKeyCell(this.focusX, this.focusY, '');
-
-        if (dir === 'x' && this.focusX > wordFrom) {
-          this.focusX -= 1;
-        }
-
-        if (dir === 'y' && this.focusY > wordFrom) {
-          this.focusY -= 1;
-        }
-
-        return;
-      }
-
-      if (keyReturn) {
-        this.highlightWord(this.focusX, this.focusY);
-        return;
-      }
-
-      if (keyLeft || keyUp || keyRight || keyDown) {
-        var navigation = keyUp ? 'up' : keyRight ? 'right' : keyDown ? 'down' : 'left';
-        var direction = keyLeft || keyRight ? 'x' : 'y';
-        this.setNextFieldForDirection(navigation);
-        this.highlightWord(this.focusX, this.focusY, direction, false, true);
-      }
-    },
-
-    /**
-     * Highlight a word the selected position belongs to
+     * Highlight a word the selected position belongs to.
      *
-     * @param x           X-position of focused field
-     * @param y           Y-position of focused field
-     * @param searchFor   Direction in which to start searching for matching word
-     * @param searchOnce  Perform search once, skip other direction (for 2nd search)
-     * @param keepWord    Stay in current word (for arrow navigation)
+     * @number x            X-position of focused field
+     * @number y            Y-position of focused field
+     * @string searchFor    Direction in which to start searching for matching word
+     * @boolean searchOnce  Perform search once, skip other direction (for 2nd search)
+     * @boolean keepWord    Stay in current word (for arrow navigation)
      */
     highlightWord: function highlightWord(x, y) {
       var _this2 = this;
@@ -744,7 +808,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-color: #FFD9D9;\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0%;\n  left: 0%;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  -webkit-filter: FlipH;\n          filter: FlipH;\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell div.key {\n  position: absolute;\n  bottom: 0;\n  right: 2px;\n  text-align: right;\n}\n.cell div.hint {\n  position: absolute;\n  bottom: 0;\n  left: 2px;\n  text-align: left;\n  color: #aaa;\n  font-size: 10px;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #111;\n}", ""]);
+exports.push([module.i, ".cell {\n  position: absolute;\n  background-color: #FFF;\n  -webkit-box-align: center;\n          align-items: center;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  padding: 2px;\n  box-sizing: border-box;\n  cursor: pointer;\n  border-right: solid 1px #444;\n  border-bottom: solid 1px #444;\n}\n.cell.left-border {\n  border-left: solid 1px #444;\n}\n.cell.top-border {\n  border-top: solid 1px #444;\n}\n.cell.highlighted {\n  background-color: #FFD9D9;\n}\n.cell.focus {\n  background-color: red;\n  background-image: none;\n}\n.cell.focus p.solution {\n  color: #fff !important;\n}\n.cell.focus.arrow:before {\n  color: #fff !important;\n}\n.cell.arrow:before {\n  display: block;\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  background-position: center top;\n  background-repeat: no-repeat;\n  background-size: 101%;\n}\n.cell.arrow--top-bottom:before, .cell.arrow--left-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,0 125,0 100,25 '/%3E%3C/svg%3E\");\n}\n.cell.arrow--left-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--left-bottom:before, .cell.arrow--bottom-right:before, .cell.arrow--top-right:before {\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E%3C!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Laag_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 200 200' style='enable-background:new 0 0 200 200;' xml:space='preserve'%3E%3Cpolygon points='75,6 125,6 100,31 '/%3E%3Crect y='6' width='100' height='2'/%3E%3C/svg%3E\");\n}\n.cell.arrow--bottom-right:before {\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.cell.arrow--top-right:before {\n  -webkit-transform: scaleX(-1) rotate(90deg);\n  transform: scaleX(-1) rotate(90deg);\n  /*filter: FlipH;*/\n  -ms-filter: \"FlipH\";\n}\n.cell.clue {\n  background-color: #FFFEE6;\n  cursor: default;\n}\n.cell div.key {\n  position: absolute;\n  bottom: 0;\n  right: 2px;\n  text-align: right;\n}\n.cell div.hint {\n  position: absolute;\n  bottom: 0;\n  left: 2px;\n  text-align: left;\n  color: #aaa;\n  font-size: 10px;\n}\n.cell p.clue {\n  font-size: 12px;\n  text-align: center;\n  color: #000;\n}\n.cell p.solution {\n  font-size: 20px;\n  color: #111;\n}", ""]);
 
 // exports
 

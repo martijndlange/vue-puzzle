@@ -128,7 +128,6 @@
         return this.hasArrow && this.arrows.from === from && this.arrows.to === to;
       },
       handleFocus: function () {
-        document.getElementById('feedback-input').focus();
         if (!this.isClue) {
           this.$emit('cell-focussed', this.x, this.y);
         }
@@ -181,8 +180,8 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      top: 0%;
-      left: 0%;
+      top: 0;
+      left: 0;
       background-position: center top;
       background-repeat: no-repeat;
       background-size: 101%;
@@ -211,7 +210,7 @@
       -o-transform: scaleX(-1);
       -webkit-transform: scaleX(-1) rotate(90deg);
       transform: scaleX(-1) rotate(90deg);
-      filter: FlipH;
+      /*filter: FlipH;*/
       -ms-filter: "FlipH";
     }
 
