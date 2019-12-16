@@ -228,6 +228,10 @@
        * @number y
        */
       handleCellFocus: function(x, y) {
+        // when clicking again, keep focus on input
+        if (this.focusX === x && this.focusY === y) {
+          this.setScroll();
+        }
         this.focusX = x;
         this.focusY = y;
         this.highlightWord(x, y);

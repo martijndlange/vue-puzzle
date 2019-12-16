@@ -484,6 +484,11 @@ __webpack_require__.r(__webpack_exports__);
      * @number y
      */
     handleCellFocus: function handleCellFocus(x, y) {
+      // when clicking again, keep focus on input
+      if (this.focusX === x && this.focusY === y) {
+        this.setScroll();
+      }
+
       this.focusX = x;
       this.focusY = y;
       this.highlightWord(x, y);
