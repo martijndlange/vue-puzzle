@@ -340,6 +340,14 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellSize * this.height;
     }
   },
+  watch: {
+    focusX: function focusX() {
+      this.setScroll();
+    },
+    focusY: function focusY() {
+      this.setScroll();
+    }
+  },
   created: function created() {//
   },
   mounted: function mounted() {
@@ -478,7 +486,6 @@ __webpack_require__.r(__webpack_exports__);
     handleCellFocus: function handleCellFocus(x, y) {
       this.focusX = x;
       this.focusY = y;
-      this.setScroll();
       this.highlightWord(x, y);
     },
 
@@ -516,7 +523,6 @@ __webpack_require__.r(__webpack_exports__);
         this.focusY += 1;
       }
 
-      this.setScroll();
       this.feedbackInputValue = '';
     },
 
@@ -545,7 +551,6 @@ __webpack_require__.r(__webpack_exports__);
         if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
           this.$set(this.solution[this.focusX], this.focusY, '');
           this.storeKeyCell(this.focusX, this.focusY, '');
-          this.setScroll();
           return;
         }
       }
@@ -562,13 +567,11 @@ __webpack_require__.r(__webpack_exports__);
           this.focusY -= 1;
         }
 
-        this.setScroll();
         return;
       }
 
       if (keyReturn) {
         this.highlightWord(this.focusX, this.focusY);
-        this.setScroll();
         return;
       }
 
@@ -577,7 +580,6 @@ __webpack_require__.r(__webpack_exports__);
         var direction = keyLeft || keyRight ? 'x' : 'y';
         this.setNextFieldForDirection(navigation);
         this.highlightWord(this.focusX, this.focusY, direction, false, true);
-        this.setScroll();
       }
     },
 

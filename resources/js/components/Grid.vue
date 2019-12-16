@@ -97,6 +97,14 @@
         return this.cellSize * this.height;
       }
     },
+    watch: {
+      focusX: function() {
+        this.setScroll();
+      },
+      focusY: function() {
+        this.setScroll();
+      },
+    },
     created: function () {
       //
     },
@@ -222,7 +230,6 @@
       handleCellFocus: function(x, y) {
         this.focusX = x;
         this.focusY = y;
-        this.setScroll();
         this.highlightWord(x, y);
       },
       /**
@@ -259,8 +266,6 @@
         if (dir === 'y' && this.focusY < wordTo) {
           this.focusY += 1;
         }
-
-        this.setScroll();
         this.feedbackInputValue = '';
       },
       /**
@@ -289,7 +294,6 @@
           if (this.solution[this.focusX] && this.solution[this.focusX][this.focusY]) {
             this.$set(this.solution[this.focusX], this.focusY, '');
             this.storeKeyCell(this.focusX, this.focusY, '');
-            this.setScroll();
             return;
           }
         }
@@ -303,13 +307,11 @@
           if (dir === 'y' && this.focusY > wordFrom) {
             this.focusY -= 1;
           }
-          this.setScroll();
           return;
         }
 
         if (keyReturn) {
           this.highlightWord(this.focusX, this.focusY);
-          this.setScroll();
           return;
         }
 
@@ -318,7 +320,6 @@
           let direction = keyLeft || keyRight ? 'x' : 'y';
           this.setNextFieldForDirection(navigation);
           this.highlightWord(this.focusX, this.focusY, direction, false, true);
-          this.setScroll();
         }
       },
       /**
